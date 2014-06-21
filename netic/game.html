@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Netic</title>
+</head>
+<body style="margin:0px; height:320px; width:640px; margin-left:auto; margin-right:auto;">
+	<div id="debug" style="position:absolute; top:0px; left:0px;">
+		<div id="debug1"></div>
+		<div id="debug2"></div>
+		<div id="debug3"></div>
+		<div id="debug4"></div>
+		<div id="debug5"></div>
+		<div id="debug6"></div>
+		<div id="debug7"></div>
+		<div id="debug8"></div>
+		<div id="debug9"></div>
+		<div id="debug10"></div>
+		<div id="debug11"></div>
+		<div id="debug12"></div>
+		<div id="debug13"></div>
+		<div id="debug14"></div>
+		<div id="debug15"></div>
+		<div id="debug16"></div>
+		<div id="debug17"></div>
+		<div id="debug18"></div>
+		<div id="debug19"></div>
+		<div id="debug20"></div>
+	</div>
+	
+	<canvas id="game_canvas"></canvas>
+	
+	<div id="hud" style="width:640px; height:640px; position:absolute;">
+		<div id="energy_text" style="width:50px; color:yellow; float:left;">Energy:</div>
+		<div id="energy_wrapper" style="width:100px; height:10px; margin-top:5px; float:left;background-color:grey; position:relative;">
+			<div id="energy" style="width:100px; height:10px; background-color:yellow;"></div>
+		</div>
+	</div>
+	
+	<script src="initialize.js"></script>
+	<script src="library.js"></script>
+		<script src="scripts/dash.js"></script>
+		<script src="scripts/flybot_input.js"></script>
+		<script src="scripts/netic_input.js"></script>
+		<script src="scripts/actgravity.js"></script>
+		<script src="scripts/actcamera.js"></script>
+	<script src="objects.js"></script>
+	<script src="input.js"></script>
+	<script src="act.js"></script>
+	<script src="resolve.js"></script>
+	<script src="game.js"></script>
+	<div id="credits" style="display:none;">
+	A project created by Ty Dang that demonstrates the laws and physics that govern the world, particular art-style,
+	and dynamically changing perspectives (from platformer to top down to first person). There will be a GUI that
+	allows users to create levels.
+	</div>
+</body>
+</html>
+<!--
+	Things needed for Netic:
+		-	Netic
+		-	Generated platforms
+		-	Start
+		-	Finish
+		-	Cycle (Regeneration)
+		-	Controls (dash, jump, energy)
+		-	Shoot
+		-	Flying birds
+		-	Resources (points)
+		-	HUD
+		-	Follow Cam
+--!>
