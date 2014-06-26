@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+  </head> 
+  <body>
+    <canvas id="myCanvas" width="600" height="400"></canvas>
+    <script>
+
+    // shim layer with setTimeout fallback 
+      window.requestAnimFrame = (function(){ 
+        return  window.requestAnimationFrame       ||  
+                window.webkitRequestAnimationFrame ||  
+                window.mozRequestAnimationFrame    ||  
+                window.oRequestAnimationFrame      ||  
+                window.msRequestAnimationFrame     ||  
+                function( callback ){ 
+                  window.setTimeout(callback, 1000 / 60); 
+                }; 
+      })();
+
+
+
+    var canvas = document.getElementById('myCanvas'); 
+    var my_image;
+
+      loadResources(); //preload
+
+      function loadResources(){
+        my_image = new Image();
+        my_image.src = "img/Hunter1.bmp";
+      }
+
+    var dino = []; 
+    var tick = 0; 
+    function loop() { 
+        window.requestAnimFrame(loop); 
+        createParticles(); 
+        updateParticles(); 
+        killParticles(); 
+        drawParticles(); 
+    }      
+
+    function createParticles() {        
+      if(dino.length < 1) {
+        dino.push({
+                x: 0,
+                y: -10,
+                speed: 2                        
+        });
+      }
+    }    
+
+    function updateParticles() {
+        for(var i in dino) {
+            var part = dino[i];
+            part.x += part.speed;
+        }
+    }
+    function killParticles() {
+        for(var i in dino) {
+            var part = dino[i];
+            if(part.x > canvas.width) {
+                return
+            }
+        }
+    }
+
+    function drawParticles() {
+        var c = canvas.getContext('2d');
+        c.fillStyle = "black";
+        c.fillRect(0,0,canvas.width,canvas.height);
+        for(var i in dino) {
+          var part = dino[i];        
+          c.drawImage(
+            my_image,
+            49,25,23,23,
+            part.x,0,46,46
+            );           
+        }
+    }
+
+    window.requestAnimFrame(loop); 
+
+
+
+      
+    </script>
+  </body>
+</html>    
