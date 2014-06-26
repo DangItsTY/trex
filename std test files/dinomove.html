@@ -24,17 +24,15 @@
                 }; 
       })();
 
-
-
     var canvas = document.getElementById('myCanvas'); 
     var my_image;
 
-      loadResources(); //preload
+    loadResources(); //preload
 
-      function loadResources(){
-        my_image = new Image();
-        my_image.src = "img/Hunter1.bmp";
-      }
+    function loadResources(){
+      my_image = new Image();
+      my_image.src = "img/Hunter1.bmp";
+    }
 
     var dino = []; 
     var tick = 0; 
@@ -50,7 +48,7 @@
       if(dino.length < 1) {
         dino.push({
                 x: 0,
-                y: -10,
+                y: 200,
                 speed: 2                        
         });
       }
@@ -75,14 +73,17 @@
         var c = canvas.getContext('2d');
         c.fillStyle = "black";
         c.fillRect(0,0,canvas.width,canvas.height);
+        var frame = Math.floor(tick/10); // animation is too fast, let's slow it down
+        var xoff = (frame%3)*24+1; // % means it loops from 0 - 2, 24 +1 is the pixel length
         for(var i in dino) {
           var part = dino[i];        
           c.drawImage(
             my_image,
-            49,25,23,23,
-            part.x,0,46,46
+            xoff,1,23,23,
+            part.x,part.y,46,46
             );           
         }
+        tick++;
     }
 
     window.requestAnimFrame(loop); 
