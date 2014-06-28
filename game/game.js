@@ -25,7 +25,27 @@ var preload = function() {
 	for (var i = 8; i<10; i++) {
 		objectList[oCount] = new bricksmile(3*64,i*64);
 	}
+	
+	//	Create Waypoints (doing this backwards
+	objectList[oCount] = new waypoint(3*64, 9*64);
+	objectList[oCount-1].target = objectList[oCount-1];
+	objectList[oCount] = new waypoint(3*64, 7*64);
+	objectList[oCount-1].target = objectList[oCount-2];
+	objectList[oCount] = new waypoint(6*64, 7*64);
+	objectList[oCount-1].target = objectList[oCount-2];
+	objectList[oCount] = new waypoint(6*64, 4*64);
+	objectList[oCount-1].target = objectList[oCount-2];
+	objectList[oCount] = new waypoint(4*64, 4*64);
+	objectList[oCount-1].target = objectList[oCount-2];
+	objectList[oCount] = new waypoint(4*64, 0);
+	objectList[oCount-1].target = objectList[oCount-2];
+	
+	objectList[oCount] = new dinosaur(0, 0);
+	objectList[oCount-1].target = objectList[oCount-2];
 	objectList[oCount] = new tower(2*64, 2*64);
+	objectList[oCount-1].target = objectList[oCount-2];
+	
+	objectList[oCount] = new spawner(4*64, 0);
 	
 };
 
