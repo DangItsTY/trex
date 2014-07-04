@@ -26,7 +26,7 @@ var preload = function() {
 		objectList[oCount] = new bricksmile(3*64,i*64);
 	}
 	
-	//	Create Waypoints (doing this backwards
+	//	Create Waypoints (doing this backwards)
 	objectList[oCount] = new waypoint(3*64, 9*64);
 	objectList[oCount-1].target = objectList[oCount-1];
 	objectList[oCount] = new waypoint(3*64, 7*64);
@@ -46,6 +46,7 @@ var preload = function() {
 	objectList[oCount-1].target = objectList[oCount-2];
 	
 	objectList[oCount] = new spawner(4*64, 0);
+	objectList[oCount] = new batObj(320,320);
 	
 };
 
@@ -76,7 +77,21 @@ var render = function (modifier) {
 //	~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*
 //	The Game Loop
 //	~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*
+// shim layer with setTimeout fallback 
+      // window.requestAnimFrame = (function(){ 
+      //   return  window.requestAnimationFrame       ||  
+      //           window.webkitRequestAnimationFrame ||  
+      //           window.mozRequestAnimationFrame    ||  
+      //           window.oRequestAnimationFrame      ||  
+      //           window.msRequestAnimationFrame     ||  
+      //           function( callback ){ 
+      //             window.setTimeout(callback, 1000 / 60); 
+      //           }; 
+      // })();
+
 var gameloop = function() {
+	 
+      // window.requestAnimFrame(gameloop);
 	//	TyNoteSpecial: Thank you to lostdecadegames for giving me the awesome tutorial that got me started with HTML5 game development!
 	now = Date.now();
 	delta = now-then;
@@ -93,4 +108,5 @@ var gameloop = function() {
 //	~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*
 then = Date.now();
 preload();
+// window.requestAnimFrame(gameloop);
 setInterval(gameloop,1);

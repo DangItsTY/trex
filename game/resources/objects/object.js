@@ -18,6 +18,34 @@ var object = function(x, y) {
 	oCount++;
 };
 
+// std
+var batObj = function(x, y) {
+	this.x = x;
+	this.y = y;
+
+	this.size = 64;
+	this.imageX = 0;
+	this.imageY = 0;
+	this.image = new Image();
+	this.image.src = "resources/images/bat.png";
+	this.collisionType = "transparent";
+	this.runInput = function(modifier) { };
+	this.act = function(modifier, obj) { movetotarget(modifier, obj); };
+	this.resolve = function(modifier) { };
+	this.target = objectList[99];
+
+	this.speed = 50;
+	    
+	this.animationspeed = 0.3;
+	this.animationtime = 0;
+
+	oCount++;
+};
+
+var batAi = function(modifier, obj){
+
+};
+
 var grasstile = function(x, y) {
 	this.x = x;
 	this.y = y;
@@ -85,12 +113,14 @@ var arrow = function(x, y) {
 	this.image.src = "resources/images/arrow.png";
 	this.collisionType = "transparent";
 	this.runInput = function(modifier) { };
-	this.act = function(modifier, obj) { movetotarget(modifier, obj); isinrangedie(modifier, obj); };
+	this.act = function(modifier, obj) { movetotarget(modifier, obj); attack(modifier, obj); isinrangedie(modifier, obj); };
 	this.resolve = function(modifier, obji) { };
 	
 	this.speed = 256;
 	this.target;
 	this.readytodie = false;			//	If true, this object is ready to be removed from the game.
+
+	this.damage = 2; 
 
 	oCount++;
 };
@@ -105,18 +135,36 @@ var autoattackarrow = function (modifier, obj) {
 	obj.attacktimer += modifier;
 };
 
+var switchtarget = function(modifier, obj) {
+	if (obj.x <= obj.target.x + obj.size && obj.x >= obj.target.x - obj.size &&
+		obj.y <= obj.target.y + obj.size && obj.y >= obj.target.y - obj.size) {
+		obj.target = (obj.target).target;
+	}
+};
+
 var movetotarget = function (modifier, obj) {
-	if (obj.x < obj.target.x) {
-		obj.x += obj.speed*modifier;
+	if (obj.target.readytodie == false){
+		if (obj.x < obj.target.x) {
+			obj.x += obj.speed*modifier;
+		}
+		else {
+			obj.x -= obj.speed*modifier;
+		}
+		if (obj.y < obj.target.y) {
+			obj.y += obj.speed*modifier;
+		}
+		else {
+			obj.y -= obj.speed*modifier;
+		}
 	}
-	else {
-		obj.x -= obj.speed*modifier;
-	}
-	if (obj.y < obj.target.y) {
-		obj.y += obj.speed*modifier;
-	}
-	else {
-		obj.y -= obj.speed*modifier;
+	else
+		document.getElementById('debug1').innerHTML = 'ASSHOLE'; 
+};
+
+var attack = function(modifier,obj) {
+	if (obj.x <= obj.target.x + obj.size/16 && obj.x >= obj.target.x - obj.size/16 &&
+		obj.y <= obj.target.y + obj.size/16 && obj.y >= obj.target.y - obj.size/16) {
+		obj.target.health -= obj.damage;
 	}
 };
 
@@ -133,6 +181,12 @@ var die = function (modifier, obj) {
 	}
 };
 
+var isdead = function(modifier,obj) {
+	if (obj.health <=0) {
+		obj.readytodie = true;
+	}
+
+};
 var dinosaur = function(x, y) {
 	this.x = x;
 	this.y = y;
@@ -144,11 +198,14 @@ var dinosaur = function(x, y) {
 	this.image.src = "resources/images/charlie.png";
 	this.collisionType = "transparent";
 	this.runInput = function(modifier) { };
-	this.act = function(modifier, obj) { movetotarget(modifier, obj); switchtarget(modifier, obj); dinoanimate(modifier, obj); };
+	this.act = function(modifier, obj) { movetotarget(modifier, obj); switchtarget(modifier, obj); dinoanimate(modifier, obj); isdead(modifier, obj); };
 	this.resolve = function(modifier) { };
 	
 	this.speed = 50;
 	this.target;
+
+	this.health = 3; 
+	this.readytodie = false;			//	If true, this object is ready to be removed from the game.
     
 	this.animationspeed = 0.3;
 	this.animationtime = 0;
@@ -167,13 +224,6 @@ var dinoanimate = function(modifier, obj) {
 		obj.animationtime = 0;
 	}
 	obj.animationtime += modifier;
-};
-
-var switchtarget = function(modifier, obj) {
-	if (obj.x <= obj.target.x + obj.size && obj.x >= obj.target.x - obj.size &&
-		obj.y <= obj.target.y + obj.size && obj.y >= obj.target.y - obj.size) {
-		obj.target = (obj.target).target;
-	}
 };
 
 var waypoint = function(x, y) {
