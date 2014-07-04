@@ -28,4 +28,16 @@ var collidesWith = function(object, target) {
 
 var roll = function (min, max) {
 	return (Math.floor(Math.random() * (max-min+1)) + min);
-}
+};
+
+var findObject = function (list, objectName) {
+	//	Finds the first occurance of objectName in given list
+	var result = -1;
+	for (var i = 0; i < list.length; i++) {
+		if (list[i].name == objectName) {
+			result = i;
+			return result;
+		}
+	}
+	return result;
+};

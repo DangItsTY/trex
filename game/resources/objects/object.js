@@ -2,6 +2,7 @@
 //	Objects
 //	~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*
 var object = function(x, y) {
+	this.name = "object";
 	this.x = x;
 	this.y = y;
 
@@ -20,6 +21,7 @@ var object = function(x, y) {
 
 // std
 var batObj = function(x, y) {
+	this.name = "batObj";
 	this.x = x;
 	this.y = y;
 
@@ -47,6 +49,7 @@ var batAi = function(modifier, obj){
 };
 
 var grasstile = function(x, y) {
+	this.name = "grasstile";
 	this.x = x;
 	this.y = y;
 	
@@ -64,6 +67,7 @@ var grasstile = function(x, y) {
 };
 
 var bricksmile = function(x, y) {
+	this.name = "bricksmile";
 	this.x = x;
 	this.y = y;
 	
@@ -81,6 +85,7 @@ var bricksmile = function(x, y) {
 };
 
 var tower = function(x, y) {
+	this.name = "tower";
 	this.x = x;
 	this.y = y;
 	
@@ -91,7 +96,7 @@ var tower = function(x, y) {
 	this.image.src = "resources/images/tower.png";
 	this.collisionType = "transparent";
 	this.runInput = function(modifier) { };
-	this.act = function(modifier, obj) { autoattackarrow(modifier, obj); };
+	this.act = function(modifier, obj) { gettarget(modifier, obj); autoattackarrow(modifier, obj); };
 	this.resolve = function(modifier) { };
 	
 	this.attackdamage = 5;
@@ -103,6 +108,7 @@ var tower = function(x, y) {
 };
 
 var arrow = function(x, y) {
+	this.name = "arrow";
 	this.x = x;
 	this.y = y;
 	
@@ -125,6 +131,15 @@ var arrow = function(x, y) {
 	oCount++;
 };
 
+var gettarget = function (modifier, obj) {
+	if (obj.target.readytodie == true) {
+		var temp = findObject(objectList, "dinosaur");
+		if (temp != -1) {
+			obj.target = objectList[temp];
+		}
+	}
+};
+
 var autoattackarrow = function (modifier, obj) {
 	//	Fires an arrow according to object attack speed
 	if (obj.attacktimer > obj.attackspeed) {
@@ -143,22 +158,18 @@ var switchtarget = function(modifier, obj) {
 };
 
 var movetotarget = function (modifier, obj) {
-	if (obj.target.readytodie == false){
-		if (obj.x < obj.target.x) {
-			obj.x += obj.speed*modifier;
-		}
-		else {
-			obj.x -= obj.speed*modifier;
-		}
-		if (obj.y < obj.target.y) {
-			obj.y += obj.speed*modifier;
-		}
-		else {
-			obj.y -= obj.speed*modifier;
-		}
+	if (obj.x < obj.target.x) {
+		obj.x += obj.speed*modifier;
 	}
-	else
-		document.getElementById('debug1').innerHTML = 'ASSHOLE'; 
+	else {
+		obj.x -= obj.speed*modifier;
+	}
+	if (obj.y < obj.target.y) {
+		obj.y += obj.speed*modifier;
+	}
+	else {
+		obj.y -= obj.speed*modifier;
+	}
 };
 
 var attack = function(modifier,obj) {
@@ -188,6 +199,7 @@ var isdead = function(modifier,obj) {
 
 };
 var dinosaur = function(x, y) {
+	this.name = "dinosaur";
 	this.x = x;
 	this.y = y;
 	
@@ -204,7 +216,7 @@ var dinosaur = function(x, y) {
 	this.speed = 50;
 	this.target;
 
-	this.health = 3; 
+	this.health = 5; 
 	this.readytodie = false;			//	If true, this object is ready to be removed from the game.
     
 	this.animationspeed = 0.3;
@@ -227,6 +239,7 @@ var dinoanimate = function(modifier, obj) {
 };
 
 var waypoint = function(x, y) {
+	this.name = "waypoint";
 	this.x = x;
 	this.y = y;
 	
@@ -247,6 +260,7 @@ var waypoint = function(x, y) {
 };
 
 var spawner = function(x, y) {
+	this.name = "spawner";
 	this.x = x;
 	this.y = y;
 	
