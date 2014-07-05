@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="myCanvas" width="640" height="640" style="border:1px solid #000000; margin-left: auto; margin-right: auto; display: block"></canvas>
+    <script type='text/javascript' src='astar.js'></script>
+    <script type='text/javascript'>
+      var canvas = document.getElementById('myCanvas');
+      var context = canvas.getContext('2d');
+      
+      //default grid
+      var grid = 
+         [[1,1,1,1],
+          [0,1,1,0],
+          [0,0,1,1],
+          [0,0,1,0]] 
+
+      //creat grid 16 x 16
+      var grid2 =[
+                 [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                 ];
+      
+      //define the grid that I want to find the path for 
+      // user can change start/end points
+      var xstart = 0;
+      var ystart = 0;
+      var xend = 2;
+      var yend = 3;
+
+      var graph = new Graph(grid); // change grid for debugging
+      var start = graph.grid[xstart][ystart];
+      var end = graph.grid[xend][yend];
+      var result = astar.search(graph, start, end);
+      // result is an array containing the shortest path
+
+      var xlength = graph.grid.length;
+      var ylength = graph.grid[0].length;
+      var size = 640/xlength;
+      var sizePixel = size; // make it equal to size if you want filled square
+      // size = 16;
+
+      //draw the canva
+      // tempx = 1;
+      // tempy = 0;
+      // context.fillStyle = "0FFFFFF";
+      // context.fillRect(tempx*size,tempy*size,sizePixel,sizePixel);
+      // console.log(grid[tempx][tempy]);
+      for (i = 0; i<xlength; i++)
+      {
+        for (j = 0; j<ylength; j++)
+        {
+           if(graph.grid[i][j].weight == 0){
+            context.fillStyle = "#000000"; // make impassable black
+          }
+          else{
+             context.fillStyle="#00CCFF"; // make 1 weight path teal
+          }
+
+          context.fillRect(i*size,j*size,sizePixel,sizePixel)
+        }
+      }    
+
+
+      //draw the path on the canvas
+      /*
+      //color the starting and end points
+      context.fillStyle = "#CC00CC"; //purple      
+      context.fillRect(xstart*size,ystart*size,sizePixel,sizePixel)
+      context.fillRect(xend*size,yend*size,sizePixel,sizePixel)
+
+      // color the path red     
+      context.fillStyle = "#FF0000"; // red  
+      for (i = 0; i<result.length-1; i++){    //-1 to avoid coloring end point    
+        context.fillRect(result[i].x*size,result[i].y*size,sizePixel,sizePixel);
+      }
+
+      //make a line
+      context.beginPath();
+      context.moveTo((0+sizePixel)*0.5,0);
+      for (i = 0; i < result.length; i++)
+      {
+        context.lineTo(result[i].x*size+sizePixel*0.5,result[i].y*size+sizePixel*0.5);
+      }
+*/ 
+      
+
+      
+    </script>
+  </body>
+</html>      
