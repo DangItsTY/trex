@@ -247,6 +247,42 @@ var dinosaur = function(x, y) {
 	oCount++;
 };
 
+var unikitty = function(x, y) {
+	this.name = "unikitty";
+	this.x = x;
+	this.y = y;
+	
+	this.size = 64;
+	this.imageX = 0;
+	this.imageY = 0;
+	this.image = new Image();
+	this.image.src = "resources/images/unikitty.png";
+	this.collisionType = "transparent";
+	this.runInput = function(modifier) { };
+	this.act = function(modifier, obj) { gettarget(modifier, obj); movetotarget(modifier, obj); bite(modifier, obj); };
+	this.resolve = function(modifier) { };
+	
+	this.speed = 50;
+	this.target;
+
+	this.health = 5; 
+	this.readytodie = false;			//	If true, this object is ready to be removed from the game.
+	
+	this.damage = 9000;
+    
+	this.animationspeed = 0.3;
+	this.animationtime = 0;
+
+	oCount++;
+};
+
+var bite = function(modifier, obj) {
+	if (obj.x <= obj.target.x + obj.size/16 && obj.x >= obj.target.x - obj.size/16 &&
+		obj.y <= obj.target.y + obj.size/16 && obj.y >= obj.target.y - obj.size/16) {
+		obj.target.health -= obj.damage;
+	}
+};
+
 var dinoanimate = function(modifier, obj) {
 	if (obj.animationtime > obj.animationspeed) {
 		if (obj.imageX == 0) {

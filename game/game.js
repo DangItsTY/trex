@@ -42,11 +42,13 @@ var preload = function() {
 	
 	objectList[oCount] = new dinosaur(0, 0);
 	objectList[oCount-1].target = objectList[oCount-2];
-	objectList[oCount] = new tower(2*64, 2*64);
+	//objectList[oCount] = new tower(2*64, 2*64);
+	//objectList[oCount-1].target = objectList[oCount-2];
+	objectList[oCount] = new unikitty(320, 320);
 	objectList[oCount-1].target = objectList[oCount-2];
 	
 	objectList[oCount] = new spawner(4*64, 0);
-	objectList[oCount] = new batObj(320,320);
+	objectList[oCount] = new batObj(9*64, 9*64);
 	
 };
 
