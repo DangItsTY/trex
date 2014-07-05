@@ -46,8 +46,8 @@
       // user can change start/end points
       var xstart = 0;
       var ystart = 0;
-      var xend = 2;
-      var yend = 3;
+      var xend = 3;
+      var yend = 2;
 
       var graph = new Graph(grid); // change grid for debugging
       var start = graph.grid[xstart][ystart];
@@ -61,15 +61,16 @@
       var sizePixel = size; // make it equal to size if you want filled square
       // size = 16;
 
-      //draw the canva
+      //draw the canvas
       // tempx = 1;
       // tempy = 0;
       // context.fillStyle = "0FFFFFF";
       // context.fillRect(tempx*size,tempy*size,sizePixel,sizePixel);
       // console.log(grid[tempx][tempy]);
-      for (i = 0; i<xlength; i++)
+     
+      for (i = 0; i<ylength; i++)
       {
-        for (j = 0; j<ylength; j++)
+        for (j = 0; j<xlength; j++)
         {
            if(graph.grid[i][j].weight == 0){
             context.fillStyle = "#000000"; // make impassable black
@@ -78,32 +79,36 @@
              context.fillStyle="#00CCFF"; // make 1 weight path teal
           }
 
-          context.fillRect(i*size,j*size,sizePixel,sizePixel)
+          context.fillRect(j*size,i*size,sizePixel,sizePixel)
         }
       }    
 
 
       //draw the path on the canvas
-      /*
+     
       //color the starting and end points
       context.fillStyle = "#CC00CC"; //purple      
       context.fillRect(xstart*size,ystart*size,sizePixel,sizePixel)
-      context.fillRect(xend*size,yend*size,sizePixel,sizePixel)
+      context.fillRect(yend*size,xend*size,sizePixel,sizePixel)
+
 
       // color the path red     
       context.fillStyle = "#FF0000"; // red  
       for (i = 0; i<result.length-1; i++){    //-1 to avoid coloring end point    
-        context.fillRect(result[i].x*size,result[i].y*size,sizePixel,sizePixel);
+        context.fillRect(result[i].y*size,result[i].x*size,sizePixel,sizePixel);
       }
-
+ 
       //make a line
+      context.strokeStyle = "#00FF00"; //red
       context.beginPath();
-      context.moveTo((0+sizePixel)*0.5,0);
+      context.moveTo(xstart+sizePixel*0.5,ystart);
       for (i = 0; i < result.length; i++)
       {
-        context.lineTo(result[i].x*size+sizePixel*0.5,result[i].y*size+sizePixel*0.5);
+        context.lineTo(result[i].y*size+(sizePixel*0.5),result[i].x*size+(sizePixel*0.5));
+        context.lineWidth = 10;
       }
-*/ 
+      context.stroke();
+console.log(result);
       
 
       
