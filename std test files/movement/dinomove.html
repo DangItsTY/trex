@@ -71,7 +71,7 @@
 
     function drawParticles() {
         var c = canvas.getContext('2d');
-        c.fillStyle = "black";
+        c.fillStyle = "blue";
         c.fillRect(0,0,canvas.width,canvas.height);
         var frame = Math.floor(tick/10); // animation is too fast, let's slow it down
         var xoff = (frame%3)*24+1; // % means it loops from 0 - 2, 24 +1 is the pixel length

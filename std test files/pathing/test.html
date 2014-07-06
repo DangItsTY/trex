@@ -45,7 +45,7 @@
       //define the grid that I want to find the path for 
       // user can change start/end points
       var xstart = 0;
-      var ystart = 0;
+      var ystart = 3;
       var xend = 3;
       var yend = 2;
 
@@ -88,7 +88,7 @@
      
       //color the starting and end points
       context.fillStyle = "#CC00CC"; //purple      
-      context.fillRect(xstart*size,ystart*size,sizePixel,sizePixel)
+      context.fillRect(ystart*size,xstart*size,sizePixel,sizePixel)
       context.fillRect(yend*size,xend*size,sizePixel,sizePixel)
 
 
@@ -101,7 +101,8 @@
       //make a line
       context.strokeStyle = "#00FF00"; //red
       context.beginPath();
-      context.moveTo(xstart+sizePixel*0.5,ystart);
+      // context.moveTo(ystart+sizePixel*0.5,xstart);
+      context.moveTo(3*size+sizePixel*0.5,0+sizePixel*0.5);
       for (i = 0; i < result.length; i++)
       {
         context.lineTo(result[i].y*size+(sizePixel*0.5),result[i].x*size+(sizePixel*0.5));
