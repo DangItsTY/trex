@@ -48,12 +48,12 @@ addEventListener("keyup", function (e) {
 	delete keysDown[e.keyCode];
 }, false);
 
-canvas.addEventListener("mousedown", testfunction, false);
-function testfunction() {
+canvas.addEventListener("mousedown", mouseDown, false);		//	Note, detecting for left click requires these few functions. Added a special index "leftclick" for keysDown and keysUp
+function mouseDown() {
 	keysDown["leftclick"] = true;
 }
-canvas.addEventListener("mouseup", testfunction2, false);
-function testfunction2() {
+canvas.addEventListener("mouseup", mouseUp, false);
+function mouseUp() {
 	keysDown["leftclick"] = false;
 }
 
