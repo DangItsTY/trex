@@ -2,9 +2,9 @@
 //	Resolve
 //	~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*
 
-var resolve = function (modifier) {
+var resolve = function () {
 	for (var i = 0; i < objectList.length; i++) {
-		objectList[i].resolve(modifier, i);
+		objectList[i].resolve(objectList[i]);
 	}
 	
 	cleanobjectlist();

@@ -14,6 +14,7 @@ var cameraDeltaX = 0;
 var cameraDeltaY = 0;
 var objectList = new Array();
 var oCount = 0;
+var mousePos;	//	The mouse position in mousePos.x for x, mousePos.y for y
 
 //	CONSTANTS
 var IMAGESIZE = 16;
@@ -45,6 +46,19 @@ addEventListener("keydown", function (e) {
 addEventListener("keyup", function (e) {
 	keysUp[e.keyCode] = true;
 	delete keysDown[e.keyCode];
+}, false);
+
+canvas.addEventListener("mousedown", testfunction, false);
+function testfunction() {
+	keysDown["leftclick"] = true;
+}
+canvas.addEventListener("mouseup", testfunction2, false);
+function testfunction2() {
+	keysDown["leftclick"] = false;
+}
+
+canvas.addEventListener('mousemove', function(evt) {
+	mousePos = getMousePos(canvas, evt);
 }, false);
 
 //	Key Mapping
