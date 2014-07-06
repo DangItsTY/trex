@@ -127,6 +127,16 @@ var spawndino = function (object) {
 	object.spawntime += modifier;
 };
 
+var spawndino2 = function (object) {
+	if (object.spawntime >= object.spawnspeed) {
+		objectList[oCount] = new dinosaur2(object.x, object.y);
+		objectList[oCount-1].waypointlist = object.waypointlist;
+		objectList[oCount-1].target = object.waypointlist[0];
+		object.spawntime = 0;
+	}
+	object.spawntime += modifier;
+};
+
 
 
 

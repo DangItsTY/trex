@@ -200,8 +200,8 @@ var spawner = function(x, y) {
 	
 	this.waypointlist;
 	this.target;
-	this.spawnspeed = 1;
-	this.spawntime = 0;
+	this.spawnspeed = 3;
+	this.spawntime = 8;
 };
 
 var waypoint = function(x, y) {
@@ -245,7 +245,7 @@ var tower = function(x, y) {
 	
 	this.health = 5;
 	this.damage = 100;
-	this.range = 1*64;
+	this.range = 1.5*64;
 	this.attackspeed = 1;
 	this.attacktimer = 0;
 	this.speed = 256;
@@ -332,7 +332,43 @@ var dinosaur = function(x, y) {
 	this.range = 0;
 	this.attackspeed = 0;
 	this.attacktimer = 0;
-	this.speed = 50;
+	this.speed = 64;
+	this.target;
+	
+	this.animationspeed = 0.3;
+	this.animationtime = 0;
+	
+	this.readytodie = false;			//	If true, this object is ready to be removed from the game.
+	this.animationspeed = 0.3;
+	this.animationtime = 0;
+	
+	this.waypointlist = new Array();
+};
+
+var dinosaur2 = function(x, y) {
+	this.name = "dinosaur";
+	this.type = "enemy";
+	this.description = "A fearless dinosaur. Follows waypoints. Simple creature.";
+	this.x = x;
+	this.y = y;
+	this.size = 64;
+	this.imageX = 0;
+	this.imageY = 0;
+	this.image = new Image();
+	this.image.src = "resources/images/charlie.png";
+	this.collisionType = "transparent";
+	this.runInput = function() { };
+	this.act = function(object) { dino_ai(object); };
+	this.resolve = function(object) { };
+	oCount++;
+	
+	
+	this.health = 800;
+	this.damage = 0;
+	this.range = 0;
+	this.attackspeed = 0;
+	this.attacktimer = 0;
+	this.speed = 64;
 	this.target;
 	
 	this.animationspeed = 0.3;

@@ -10,7 +10,6 @@ var input = function() {
 	if (keysDown["leftclick"] && !keysUp["leftclick"]) {
 		document.getElementById("debug1").innerHTML = "X : " + mousePos.x + " Y: " + mousePos.y;
 		objectList[oCount] = new tower(mousePos.x, mousePos.y);
-		objectList[oCount-1].range = 9*64;
 		keysUp["leftclick"] = true;
 	}
 	if (!keysDown["leftclick"]) {
