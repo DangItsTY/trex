@@ -159,22 +159,7 @@
     }
 
      
-      var wave = [];
-      var waveCounter = 0;
-      function createWave(pinterval,pspawn,ppath,punits,pcount,pIU){
-        wave.push({
-                interval: pinterval, // seconds, each 60 ticks is 1 sec (i think)
-                spawn: pspawn, //spawn point
-                path: ppath, // all units of this wave have this path     
-                units: punits, // name of units in this wave; going to be trex and tri objects in this wave
-                count: pcount, // # of units of each object; # of trex = 10, tri = 10
-                intervalUnits: pIU // time between each unit spawn; every 2 seconds trex comes, every 2 seconds tri comes               
-          });
-      }  
-      createWave(0,1,path[1],['trex','tri','trex'],[2,6,3],[2,1,3]);
-      // createWave(1,1,path[1],['tri'],[1],[2]);
-      createWave(1,0,path[0],['tri'],[1],[2]);
-        
+      
       function createObj(pname,ppath,px,py,pinterval){
           switch (pname){
             case 'trex':                  
@@ -182,7 +167,7 @@
                      health: 100,
                      img: trex_image,
                      dmg: 5,
-                     speed: 1,
+                     speed: 2,
                      target: 0,
                      path: ppath,    
                      xstart: px, 
@@ -200,7 +185,7 @@
                      health: 100,
                      img: tri_image,
                      dmg: 5,
-                     speed: 1,
+                     speed: 2,
                      target: 0,
                      path: ppath,    
                      xstart: px, 
@@ -214,11 +199,31 @@
                   return tri;
                   break;
           }
-        }
+        } // end createObj
 
+        var wave = [];
+        var waveCounter = 0;
+        function createWave(pinterval,pspawn,ppath,punits,pcount,pIU){
+          wave.push({
+                  interval: pinterval, // seconds, time between start time of each wave
+                  spawn: pspawn, //spawn point
+                  path: ppath, // all units of this wave have this path     
+                  units: punits, // name of units in this wave; going to be trex and tri objects in this wave
+                  count: pcount, // # of units of each object; # of trex = 10, tri = 10
+                  intervalUnits: pIU // time between each unit spawn; every 2 seconds trex comes, every 2 seconds tri comes               
+            });
+        }  
+
+      //Wave list
+      //Problem: If I wanted two spawn locations spawning at the same time, how to do it
+      createWave(0,1,path[1],['trex','tri','trex'],[2,3,3],[2,1,1]);
+      createWave(0,1,path[1],['tri'],[1],[2]);
+      //createWave(0,0,path[0],['tri'],[1],[2]);
+          
       var dino = []; //objectlist 
       var tick = 0;
       var waveList = [];    
+      var waveTimer = 0;
       var unitCounter = 0;
       var intervalMap = [];    
       var time = 0;
@@ -234,35 +239,36 @@
       
       function createParticles() { 
 
-        //1 create a master wave list
-        //2 push objects into dino at unit interval
-        if(waveCounter <= wave.length-1 && tick==wave[waveCounter].interval*60){ //if interval has passed, then create the list        
+        // create master wave list
+        console.log(waveCounter + " waveTimer: " + waveTimer); 
+        if(waveCounter <= wave.length-1 && waveTimer==wave[waveCounter].interval*60){ //if interval has passed, then create next wave       
           for (i = 0; i < wave[waveCounter].units.length; i++){ // 
-          		for (j = 0; j < wave[waveCounter].count[i]; j++) { //create count number of objects
-                  // if(tick%wave[waveCounter].intervalUnits==0){
+          		for (j = 0; j < wave[waveCounter].count[i]; j++) { //create count number of objects                 
                   waveList.push(
             		  createObj(wave[waveCounter].units[i],   //unit name
                     wave[waveCounter].path,                      // path
                     spawn[wave[waveCounter].spawn].y,      // xstart: spawn[wave[waveCounter].path].y,
                     spawn[wave[waveCounter].spawn].x,      // ystart: spawn[wave[waveCounter].path].x,
                     wave[waveCounter].intervalUnits[i]) 
-                    ); // end push                       
-                      // }//if     
-  	             } // inner for
+                    ); // end push  
+  	             } // inner for                 
   	           } // outer for
-  	       waveCounter++;  
-           intervalMap = waveList.map(function(o){return o.interval;});  
-           // console.log(intervalMap);       
+        waveTimer=-1;
+  	    waveCounter++;  
+        intervalMap = waveList.map(function(o){return o.interval;});  // this is to extract the interval information from each object
+                 
   	     } // end if
          
-         console.log('unitTimer ' + unitTimer + " " + 60*intervalMap[unitCounter]);
+         // console.log('unitTimer ' + unitTimer + " " + 60*intervalMap[unitCounter]);
          // console.log('tick ' + tick+ " " + unitCounter*60*intervalMap[unitCounter]);
+         // When the stated interval between units has passed, create the object in the object list
          if(60*intervalMap[unitCounter] == unitTimer){
           dino.push(waveList[unitCounter])
           unitCounter++;
-          unitTimer = 0;
-          console.log('this' + dino);
+          unitTimer = -1;
+          // console.log('this' + dino);
         }
+
        }// end function 
           
        // console.log(dino);
@@ -306,9 +312,10 @@
               //     return
               // }
               if(part.x == part.xend*size && part.y == part.yend*size){
-                part.target = 0;
-                part.x = part.xstart*size;
-                part.y = part.ystart*size;
+                delete dino[i];
+                // part.target = 0;
+                // part.x = part.xstart*size;
+                // part.y = part.ystart*size;
                 // console.log('la');
                 // return
               }
@@ -333,6 +340,9 @@
           }
           tick++;
           unitTimer++;
+          if(waveCounter <= wave.length-1){
+            waveTimer++;
+          }
       }
 
           //draw the path on the canvas
