@@ -187,7 +187,7 @@
                 wspawn: 1, //spawn point
                 path: path[1], // all units of this wave have this path     
                 units: ['trex'], // name of units in this wave; going to be trex and tri objects in this wave
-                count: [1], // # of units of each object; # of trex = 10, tri = 10
+                count: [2], // # of units of each object; # of trex = 10, tri = 10
                 intervalUnits: [2] // time between each unit spawn; every 2 seconds trex comes, every 2 seconds tri comes               
           });
       function createObj(pname,ppath,px,py,pinterval){
@@ -329,7 +329,7 @@
           var frame = Math.floor(tick/10); // animation is too fast, let's slow it down
           var xoff = (frame%3)*24+1; // % means it loops from 0 - 2, 24 +1 is the pixel length
           for(var i in dino) {
-            var part = dino[i];        
+            var part = dino[i];                    
             context.drawImage(
               part.img,
               xoff,1,23,23, // image x, y, width, height
