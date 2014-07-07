@@ -177,6 +177,24 @@ var bricksmile = function(x, y) {
 	oCount++;
 };
 
+var selector = function (x, y) {
+	this.name = "selector";
+	this.type = "neutral";
+	this.description = "An indicator. Shows selected square.";
+	this.x = x;
+	this.y = y;
+	this.size = 64;
+	this.imageX = 0;
+	this.imageY = 0;
+	this.image = new Image();
+	this.image.src = "resources/images/selector.png";
+	this.collisionType = "transparent";
+	this.runInput = function() { };
+	this.act = function(object) { followMouseGrid(object); };
+	this.resolve = function(object) { };
+	oCount++;
+};
+
 //	~~~~~~~*~~~~~~~*~~~~~~~*~~~~~~~*
 //	Tool Objects
 //	~~~~~~~*~~~~~~~*~~~~~~~*~~~~~~~*
@@ -202,6 +220,30 @@ var spawner = function(x, y) {
 	this.target;
 	this.spawnspeed = 3;
 	this.spawntime = 8;
+	this.spawnmax = 5;
+	this.spawncount = 0;
+	this.readytodie = false;
+};
+
+var timeline = function(x, y) {
+	this.name = "timeline";
+	this.type = "neutral";
+	this.description = "The timeline that holds all of the events to happen in the game";
+	this.x = x;
+	this.y = y;
+	this.size = 64;
+	this.imageX = 0;
+	this.imageY = 0;
+	this.image = new Image();
+	this.image.src;
+	this.collisionType = "transparent";
+	this.runInput = function() { };
+	this.act = function(object) { level1(object); };
+	this.resolve = function(object) { };    
+	oCount++;
+	
+	this.timelinetimer = 0;		//	Keeps track of time passed
+	this.event = 0;		//	The event number
 };
 
 var waypoint = function(x, y) {
@@ -363,7 +405,7 @@ var dinosaur2 = function(x, y) {
 	oCount++;
 	
 	
-	this.health = 800;
+	this.health = 1100;
 	this.damage = 0;
 	this.range = 0;
 	this.attackspeed = 0;

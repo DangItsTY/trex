@@ -8,8 +8,7 @@
 var input = function() {
 	//objectList[selectedPlayer].runInput();
 	if (keysDown["leftclick"] && !keysUp["leftclick"]) {
-		document.getElementById("debug1").innerHTML = "X : " + mousePos.x + " Y: " + mousePos.y;
-		objectList[oCount] = new tower(mousePos.x, mousePos.y);
+		objectList[oCount] = new tower(theSelector.x, theSelector.y);
 		keysUp["leftclick"] = true;
 	}
 	if (!keysDown["leftclick"]) {

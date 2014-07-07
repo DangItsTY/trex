@@ -92,6 +92,19 @@ var follow = function (object) {
 	}
 };
 
+var followMouseGrid = function (object) {
+//	~~~~~~~*~~~~~~~*
+//	Requirements:
+//	Description: Follow wherever the mouse is in a grid-like manner
+//	Note: Perhaps just make a mouse object? Nah, mice are special.
+//	Note: Hard coded values Fix this
+//	~~~~~~~*~~~~~~~*
+	if (mousePos != null) {
+		object.x = Math.floor((mousePos.x+32)/64) * 64;
+		object.y = Math.floor((mousePos.y+32)/64) * 64;
+	}
+};
+
 var isdead = function (object) {
 //	~~~~~~~*~~~~~~~*
 //	Requirements:
@@ -123,8 +136,12 @@ var spawndino = function (object) {
 		objectList[oCount-1].waypointlist = object.waypointlist;
 		objectList[oCount-1].target = object.waypointlist[0];
 		object.spawntime = 0;
+		object.spawncount += 1;
 	}
 	object.spawntime += modifier;
+	if (object.spawncount >= object.spawnmax) {
+		object.readytodie = true;
+	}
 };
 
 var spawndino2 = function (object) {
@@ -133,8 +150,70 @@ var spawndino2 = function (object) {
 		objectList[oCount-1].waypointlist = object.waypointlist;
 		objectList[oCount-1].target = object.waypointlist[0];
 		object.spawntime = 0;
+		object.spawncount += 1;
 	}
 	object.spawntime += modifier;
+	if (object.spawncount >= object.spawnmax) {
+		object.readytodie = true;
+	}
+};
+
+var level1 = function (object) {
+	if (object.timelinetimer > 5 && object.event == 0) {
+		objectList[oCount] = new spawner(4*64, 0*64);
+		objectList[oCount-1].waypointlist = tempList;
+		objectList[oCount-1].target = objectList[oCount-1].waypointlist[0];
+		objectList[oCount-1].spawnspeed = 5;
+		object.event += 1;
+		
+		var tempmsg = '<h3>Wave1</h3><br>';
+		tempmsg += 'Dinosaurs attack!';
+		document.getElementById("debug1").innerHTML = tempmsg;
+	}
+	if (object.timelinetimer > 30 && object.event == 1) {
+		objectList[oCount] = new spawner(4*64, 0*64);
+		objectList[oCount-1].waypointlist = tempList;
+		objectList[oCount-1].target = objectList[oCount-1].waypointlist[0];
+		objectList[oCount-1].spawnspeed = 3;
+		objectList[oCount-1].spawnmax = 10;
+		object.event += 1;
+		
+		var tempmsg = '<h3>Wave2</h3><br>';
+		tempmsg += 'Theres more of them coming faster!';
+		document.getElementById("debug1").innerHTML = tempmsg;
+	}
+	if (object.timelinetimer > 65 && object.event == 2) {
+		objectList[oCount] = new spawner(4*64, 0*64);
+		objectList[oCount-1].waypointlist = tempList;
+		objectList[oCount-1].target = objectList[oCount-1].waypointlist[0];
+		objectList[oCount-1].spawnspeed = 3;
+		objectList[oCount-1].spawnmax = 1;
+		objectList[oCount-1].act = function(object) { spawndino2(object); };
+		object.event += 1;
+		
+		var tempmsg = '<h3>Wave3</h3><br>';
+		tempmsg += 'Look out theres a big one!';
+		document.getElementById("debug1").innerHTML = tempmsg;
+	}
+	if (object.timelinetimer > 80 && object.event == 3) {
+		objectList[oCount] = new spawner(4*64, 0*64);
+		objectList[oCount-1].waypointlist = tempList;
+		objectList[oCount-1].target = objectList[oCount-1].waypointlist[0];
+		objectList[oCount-1].spawnspeed = 1;
+		objectList[oCount-1].spawnmax = 30;
+		object.event += 1;
+		
+		var tempmsg = '<h3>Final Wave</h3><br>';
+		tempmsg += 'Here they all come!';
+		document.getElementById("debug1").innerHTML = tempmsg;
+	}
+	if (object.timelinetimer > 120 && object.event == 4) {
+		var tempmsg = '<h3>Victory!</h3><br>';
+		tempmsg += 'Thanks for playing!';
+		document.getElementById("debug1").innerHTML = tempmsg;
+	}
+	object.timelinetimer += modifier;
+	document.getElementById("debug2").innerHTML = object.timelinetimer;
 };
 
 

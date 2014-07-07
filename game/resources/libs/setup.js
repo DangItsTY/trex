@@ -16,6 +16,11 @@ var objectList = new Array();
 var oCount = 0;
 var mousePos;	//	The mouse position in mousePos.x for x, mousePos.y for y
 
+//	Test Variables
+var theSelector;
+var tempList = new Array();
+var tempList2 = new Array();
+
 //	CONSTANTS
 var IMAGESIZE = 16;
 var CANVASWIDTH = 640;
