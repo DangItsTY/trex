@@ -1,4 +1,4 @@
-<!-- Test file that integrates pathing and image animation , with spawn and dest objs-->
+<!-- Test file that integrates pathing and image animation , with spawn and dest objs, introducing waves-->
 <!DOCTYPE HTML>
 <html>
   <head>
@@ -30,15 +30,15 @@
 
       var my_image;
       var trex_image;
-      var hi; 
+
 
       loadResources(); //preload
 
       function loadResources(){
-        my_image = new Image();
-        my_image.src = "img/Hunter1.bmp";
+        tri_image = new Image();
+        tri_image.src = "img/tri.bmp";
         trex_image = new Image();
-        trex_image.src = "img/trex.png";
+        trex_image.src = "img/trex.bmp";
       }
 
       //default grid
@@ -172,78 +172,105 @@
           killParticles(); 
           drawParticles(); 
       }    
-
-      function createObj(pname,ppath,px,py,pxend,pyend,pinterval){
-      switch pname
-      case: trex{
-		function trex(){
-		this.health = 100;
-		this.img = trex_image;
-		this.dmg = 5;
-		this.speed = 1;
-		this.target = 0;
-
-		this.path=ppath;		
-		this.xstart = px;
-		this.ystart = py;
-		this.xend = pxend;
-		this.yend = pyend;
-		this.x = xstart;
-		this.y = ystart;
-		this.interval = pinterval;
-		}
-	}  
-}
-
-      function createParticles() { 
-	// 1) define what units are in a wave, specify a path
-	// 2) create an object list for that wave
-	// 3) update all the elements in the object list
-
-	//at this spawn point, create waves. waves contain # of units and interval that they come out. wave properties = interval.  
-	wave.push({
-		  interval: 20, // seconds, each 1000 tick is 1 sec (i think), so when tick = 20,000. interval is the interval between each wave		  
-		  path: 0, // all units of this wave have this path		  
-		  units: [trex,tri]; // name of units in this wave; going to be trex and tri objects in this wave
-		  count: [10,10]; // # of units of each object; # of trex = 10, tri = 10
-		  intervalUnits: [2,2]; // time between each unit spawn; every 2 seconds trex comes, every 2 seconds tri comes
-		  
-	});
-      if(wave[waveCounter].interval){ //if interval has passed, then create the list
-        // create the dino list
-	for (i = 0; i < wave[waveCounter].units.length; i++){ //
-		for (j = 0; j < count[i]; j++){ //create count number of objects
-          dino.push({
-		  createObj('wave[waveCounter].units[i]',path[wave.path],xstart,ystart,xend,yend,interval)                  
-                  xstart: spawn[wave[waveCounter].path].y,
-                  ystart: spawn[wave[waveCounter].path].x,
-                  xend: dest[wave[waveCounter].path[end].y], // assuming the pathlist has the destination coordinates
-                  yend: dest[wave[waveCounter].path[end].x],
-		  //x: xstart*size, //0 dont need
-                  //y: ystart*size, // 0 don't need
-                  //target: 0, // keeps track of the next array in path1
-                  path: path[wave[waveCounter].path],
-		  interval: wave[waveCounter].intervalUnits[i],
-                  //speed: 2
-		                      
+        // wave one         
+          // wave.push({
+          //       interval: 0, // seconds, each 60 ticks is 1 sec (i think)
+          //       spawn: 0, //spawn point
+          //       path: path[0], // all units of this wave have this path     
+          //       units: ['trex','tri'], // name of units in this wave; going to be trex and tri objects in this wave
+          //       count: [10,10], // # of units of each object; # of trex = 10, tri = 10
+          //       intervalUnits: [2,2] // time between each unit spawn; every 2 seconds trex comes, every 2 seconds tri comes               
+          // });
+          // temp wave
+          wave.push({
+                interval: 0, // seconds, each 60 ticks is 1 sec (i think)
+                wspawn: 1, //spawn point
+                path: path[1], // all units of this wave have this path     
+                units: ['trex'], // name of units in this wave; going to be trex and tri objects in this wave
+                count: [1], // # of units of each object; # of trex = 10, tri = 10
+                intervalUnits: [2] // time between each unit spawn; every 2 seconds trex comes, every 2 seconds tri comes               
           });
-         /* dino.push({
-                  x: spawn[1].y*size, //15
-                  y: spawn[1].x*size, // 0
-                  xstart: spawn[1].y, //15
-                  ystart: spawn[1].x, // 0
-                  xend: dest[1].y,
-                  yend: dest[1].x,
-                  target: 0, // keeps track of the next array in path2
-                  path: path[1],
-                  speed: 2                        
-          });*/ 
-        
-	} // inner for
-	} // outer for
-	waveCounter++;
-	} if
-      }    
+      function createObj(pname,ppath,px,py,pinterval){
+          switch (pname){
+            case 'trex':                  
+                  var trex = {
+                     health: 100,
+                     img: trex_image,
+                     dmg: 5,
+                     speed: 1,
+                     target: 0,
+                     path: ppath,    
+                     xstart: px, 
+                     ystart: py,
+                     xend: ppath[ppath.length-1].y, 
+                     yend: ppath[ppath.length-1].x,
+                     x: px*size, // px = spawn[0].y
+                     y: py*size, // py = spawn[0].x
+                     interval: pinterval
+                  }
+                  return trex;
+                  break;
+      	    case 'tri':
+                  var tri = {
+                     health: 100,
+                     img: tri_image,
+                     dmg: 5,
+                     speed: 1,
+                     target: 0,
+                     path: ppath,    
+                     xstart: px, 
+                     ystart: py,
+                     xend: ppath[ppath.length-1].y, 
+                     yend: ppath[ppath.length-1].x,
+                     x: px*size, // px = spawn[0].y
+                     y: py*size, // py = spawn[0].x
+                     interval: pinterval
+                  }
+                  return tri;
+                  break;
+          }
+        }
+      // console.log(createObj('trex',path[0],0,0,1,15,2));
+      function createParticles() {          
+        if(waveCounter <= wave.length-1 && tick==wave[waveCounter].interval*60){ //if interval has passed, then create the list
+          // create the dino list
+          console.log(wave[waveCounter].path[path.length-1]);
+          for (i = 0; i < wave[waveCounter].units.length; i++){ // 
+          		for (j = 0; j < wave[waveCounter].count[i]; j++) { //create count number of objects
+                  dino.push(
+            		  createObj(wave[waveCounter].units[i],   //unit name
+                    wave[waveCounter].path,                      // path
+                    spawn[wave[waveCounter].wspawn].y,      // xstart: spawn[wave[waveCounter].path].y,
+                    spawn[wave[waveCounter].wspawn].x,      // ystart: spawn[wave[waveCounter].path].x,
+                    wave[waveCounter].intervalUnits[i])
+                    // wave[waveCounter].path[path.length-1].y,  // xend: dest[wave[waveCounter].path[end].y], // assuming the pathlist has the destination coordinates
+                    // wave[waveCounter].path[path.length-1].x,  // yend: dest[wave[waveCounter].path[end].x],
+                    
+            		    //x: xstart*size, //0 dont need
+                    //y: ystart*size, // 0 don't need
+                    //target: 0, // keeps track of the next array in path1 dont need
+                    //path: path[wave[waveCounter].path],
+            		    //interval: wave[waveCounter].intervalUnits[i],
+                    //speed: 2          		                      
+                      ); // end push
+                     /* dino.push({ // original object that works
+                              x: spawn[1].y*size, //15
+                              y: spawn[1].x*size, // 0
+                              xstart: spawn[1].y, //15
+                              ystart: spawn[1].x, // 0
+                              xend: dest[1].y,
+                              yend: dest[1].x,
+                              target: 0, // keeps track of the next array in path2
+                              path: path[1],
+                              speed: 2                        
+                      });*/         
+  	             } // inner for
+  	           } // outer for
+  	       waveCounter++;
+  	     } // end if
+       }// end function 
+          
+       console.log(dino);
 
       function updateParticles() {
           for(var i in dino) {
@@ -278,7 +305,8 @@
       function killParticles() {
           for(var i in dino) {
               var part = dino[i];
-              console.log("x[" + i + "]: " + part.x + " " + part.yend*size + " y:" + part.y + " " + part.xend*size);
+              // console.log(part.target);
+              // console.log("x[" + i + "]: " + part.x + " " + part.yend*size + " y:" + part.y + " " + part.xend*size);
               // if(part.x > canvas.width) {
               //     return
               // }
@@ -286,6 +314,7 @@
                 part.target = 0;
                 part.x = part.xstart*size;
                 part.y = part.ystart*size;
+                console.log('la');
                 // return
               }
               

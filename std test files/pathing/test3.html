@@ -34,7 +34,7 @@
 
       function loadResources(){
         my_image = new Image();
-        my_image.src = "img/Hunter1.bmp";
+        my_image.src = "img/tri.bmp";
       }
 
       //default grid
@@ -193,7 +193,7 @@
           });
         }
       }    
-
+      console.log(dino);
       function updateParticles() {
           for(var i in dino) {
               var part = dino[i];
@@ -227,7 +227,8 @@
       function killParticles() {
           for(var i in dino) {
               var part = dino[i];
-              console.log("x[" + i + "]: " + part.x + " " + part.yend*size + " y:" + part.y + " " + part.xend*size);
+              // console.log(part.target);
+              // console.log("x[" + i + "]: " + part.x + " " + part.yend*size + " y:" + part.y + " " + part.xend*size);
               // if(part.x > canvas.width) {
               //     return
               // }
