@@ -258,6 +258,52 @@ var tylevel_1 = function () {
 			objectList[oCount] = new grasstile(j*64, i*64);
 		}
 	}
+	//	Draw Path
+	objectList[oCount] = new bricksmile(4*64, 0*64);
+	objectList[oCount] = new bricksmile(4*64, 1*64);
+	objectList[oCount] = new bricksmile(4*64, 2*64);
+	objectList[oCount] = new bricksmile(4*64, 3*64);
+	objectList[oCount] = new bricksmile(4*64, 4*64);
+	objectList[oCount] = new bricksmile(3*64, 4*64);
+	objectList[oCount] = new bricksmile(3*64, 5*64);
+	objectList[oCount] = new bricksmile(3*64, 6*64);
+	objectList[oCount] = new bricksmile(4*64, 6*64);
+	objectList[oCount] = new bricksmile(5*64, 6*64);
+	objectList[oCount] = new bricksmile(5*64, 5*64);
+	objectList[oCount] = new bricksmile(5*64, 4*64);
+	objectList[oCount] = new bricksmile(6*64, 4*64);
+	objectList[oCount] = new bricksmile(7*64, 4*64);
+	objectList[oCount] = new bricksmile(8*64, 4*64);
+	objectList[oCount] = new bricksmile(9*64, 4*64);
+	//	Make Waypoint List
+	objectList[oCount] = new waypoint(4*64, 0*64);
+	tempList.push(objectList[oCount-1]);
+	objectList[oCount] = new waypoint(4*64, 4*64);
+	tempList.push(objectList[oCount-1]);
+	objectList[oCount] = new waypoint(3*64, 4*64);
+	tempList.push(objectList[oCount-1]);
+	objectList[oCount] = new waypoint(3*64, 6*64);
+	tempList.push(objectList[oCount-1]);
+	objectList[oCount] = new waypoint(5*64, 6*64);
+	tempList.push(objectList[oCount-1]);
+	objectList[oCount] = new waypoint(5*64, 4*64);
+	tempList.push(objectList[oCount-1]);
+	objectList[oCount] = new waypoint(9*64, 4*64);
+	tempList.push(objectList[oCount-1]);
+	//	Make Timeline
+	objectList[oCount] = new timeline(0, 0);
+	
+	objectList[oCount] = new selector(0, 0);
+	theSelector = objectList[oCount-1];
+};
+
+var tylevel_1_short = function () {
+	//	Draw Grass
+	for (var i = 0; i < 10; i++) {
+		for (var j = 0; j < 10; j++) {
+			objectList[oCount] = new grasstile(j*64, i*64);
+		}
+	}
 	
 	//	Draw Path
 	var tempPathList = new Array([4, 0], [4, 1], [4, 2], [4, 3], [4, 4], [3, 4], [3, 5], [3, 6], [4, 6], [5, 6], [5, 5], [5, 4], [6, 4], [7, 4], [8, 4], [9, 4]);
