@@ -50,6 +50,9 @@
         //towers
         basictower_image = new Image();
         basictower_image.src = "img/basictower.png";
+        basicproj_image = new Image();
+        basicproj_image.src = "img/basicarrow.png";
+
 
         //enemies
         tri_image = new Image();
@@ -166,10 +169,10 @@
                    img: basictower_image,
                    projectileimg: basicproj_image,
                    dmg: 5,
-                   speed: 2,
+                   attackspeed: 2,
                    target: 0, 
-                   attacktimer:0,
-                   attackspeed:3,                      
+                   attacktimer:0,  
+                   upgradestate:0,                                      
                    x: px*size, 
                    y: py*size                   
                 }
