@@ -1,6 +1,19 @@
 //	~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*
 //	Act Scripts
 //	~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*
+var followMouseGrid = function (object) {
+//	~~~~~~~*~~~~~~~*
+//	Requirements:
+//	Description: Follow wherever the mouse is in a grid-like manner
+//	Note: Perhaps just make a mouse object? Nah, mice are special.
+//	Note: Hard coded values Fix this
+//	~~~~~~~*~~~~~~~*
+	if (mousePos != null) {
+		object.x = Math.floor((mousePos.x+32)/64) * 64;
+		object.y = Math.floor((mousePos.y+32)/64) * 64;
+	}
+};
+
 
 //	~~~~~~~TD~~~~~~*
 //	Act Gravity: Applies a downward force on player object
