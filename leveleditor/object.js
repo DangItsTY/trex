@@ -57,3 +57,65 @@ var flybot = function(x, y) {
 	
 	this.speed = 256;
 };
+
+var palette = function(x, y) {
+	//	This is a basic template for all objects. You can follow this template when creating new objects.
+
+	//	~~~~~~~*~~~~~~~*
+	//	General Fields
+	//	~~~~~~~*~~~~~~~*
+	this.name = "palette";	//	Name the object. This should be the same as the variable name.
+	this.type = "neutral";	//	Give the object a type. Example: enemy, player, neutral, tile
+	this.description = "This is the palette. :D";	//	Describe the object.
+	this.x = x;		//	The x position.
+	this.y = y;		//	The y position.
+	this.size = 64;		//	The size of the object in terms of a square (example: 16x16). Usually reflects size of the image (in pixels).
+	this.imageX = 0;	//	The x location of the object on the image. Used for spritesheets.
+	this.imageY = 0;	//	The y location of the object on the image. Used for spritesheets.
+	this.image = new Image();		//	Create an image associated with this object.
+	this.image.src = "";		//	The image source for this object.
+	this.collisionType = "transparent";			//	The collision type of the object, used for collision management.
+	this.runInput = function() { };		//	Input scripts go here. Aka player control scripts. Leave this blank if the object is an NPC.
+	this.act = function(object) { };		//	Act scripts that make the object "alive" go here. For example, AI scripts go here.
+	this.resolve = function(object) { };		//	Resolve scripts go here. These are used to resolve any conflicts that may occur during the Act stage.
+	oCount++;		//	Used to automatically increment the counter variable holding objects in objectList.
+
+	this.palettelist = new Array();
+	
+};
+
+var grasstile = function(x, y) {
+	this.name = "grasstile";
+	this.x = x;
+	this.y = y;
+	
+	this.size = 64;
+	this.imageX = 0;
+	this.imageY = 0;
+	this.image = new Image();
+	this.image.src = "resources/images/grass.png";
+	this.collisionType = "transparent";
+	this.runInput = function(modifier) { };
+	this.act = function(modifier, obj) { };
+	this.resolve = function(modifier) { };
+
+	oCount++;
+};
+
+var bricksmile = function(x, y) {
+	this.name = "bricksmile";
+	this.x = x;
+	this.y = y;
+	
+	this.size = 64;
+	this.imageX = 0;
+	this.imageY = 0;
+	this.image = new Image();
+	this.image.src = "resources/images/brick.png";
+	this.collisionType = "transparent";
+	this.runInput = function(modifier) { };
+	this.act = function(modifier, obj) { };
+	this.resolve = function(modifier) { };
+
+	oCount++;
+};
