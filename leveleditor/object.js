@@ -84,6 +84,24 @@ var palette = function(x, y) {
 	
 };
 
+var selector = function (x, y) {
+	this.name = "selector";
+	this.type = "neutral";
+	this.description = "An indicator. Shows selected square.";
+	this.x = x;
+	this.y = y;
+	this.size = 64;
+	this.imageX = 0;
+	this.imageY = 0;
+	this.image = new Image();
+	this.image.src = "resources/images/selector.png";
+	this.collisionType = "transparent";
+	this.runInput = function() { };
+	this.act = function(object) { followMouseGrid(object); };
+	this.resolve = function(object) { };
+	oCount++;
+};	
+
 var grasstile = function(x, y) {
 	this.name = "grasstile";
 	this.x = x;

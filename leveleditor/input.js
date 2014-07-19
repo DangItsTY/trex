@@ -6,5 +6,12 @@
 //	TyNote: Compartamentalizing may cause preloading lag?
 //	~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*
 var input = function() {
-	objectList[selectedPlayer].runInput();
+	//objectList[selectedPlayer].runInput();
+	if (keysDown["leftclick"] && !keysUp["leftclick"]) {
+		objectList[oCount] = new tower(theSelector.x, theSelector.y);
+		keysUp["leftclick"] = true;
+	}
+	if (!keysDown["leftclick"]) {
+		delete keysUp["leftclick"];
+	}
 };
