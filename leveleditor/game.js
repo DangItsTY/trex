@@ -4,8 +4,6 @@
 var preload = function() {
 	//objectList[oCount] = new flybot(CANVASWIDTH/2, CANVASHEIGHT/2);		//	Creates an object inside objectList
 	//selectedPlayer = 0;		//	Sets currently controlled object to the first object created (ie the one above)
-	objectList[oCount] = new selector(0, 0);
-	theSelector = objectList[oCount-1];	
     for(var i = 0; i < grid.length; i++){
     	for(var j = 0; j<grid[i].length;j++){
     		if (grid[i][j] == 0){
@@ -14,11 +12,37 @@ var preload = function() {
     		else if (grid[i][j] == 1){
     			objectList[oCount] = new bricksmile(j*IMAGESIZE,i*IMAGESIZE);
     		}
-    		else if (grid[i][j] == 2){
-    			objectList[oCount] = new spawnpoint(j*IMAGESIZE,i*IMAGESIZE);
-
    		}
     }
+	
+	var temp = "";
+	for(var i = 0; i < gridwaypoint.length; i++){
+    	for(var j = 0; j<gridwaypoint[i].length;j++){
+    		if (gridwaypoint[i][j] > 100 && gridwaypoint[i][j] < 200){
+    			objectList[oCount] = new waypoint(j*IMAGESIZE,i*IMAGESIZE);
+				//<div style="position:absolute; top:64px; left:64px;">100</div>
+				temp += '	<div style="position:absolute; top:';
+				temp +=	'	'+i*IMAGESIZE+'px; ';
+				temp += '	left:';
+				temp += '	'+j*IMAGESIZE+'px;">';
+				temp += gridwaypoint[i][j];
+				temp += '	</div>';
+				/*
+				temp += '	<div style="position:absolute; top:';
+				temp += '	64';
+				temp += '	px; left:';
+				temp += '	64';
+				temp += '	px;">';
+				temp += '	100';
+				temp += '	</div>';
+				*/
+    		}
+   		}
+    }
+	document.getElementById("waypointlabels").innerHTML = temp;
+	
+	objectList[oCount] = new selector(0, 0);
+	theSelector = objectList[oCount-1];	
 
 };
 
@@ -32,6 +56,7 @@ var update = function () {
 	
 	//	TyNote: Recommended to place debug messages here
 	//document.getElementById("debug1").innerHTML = "#1 Some Debug Message " + somevaryouwanttosee;
+	document.getElementById("debug5").innerHTML = "Test Waypoint Label: " + testWaypoint;
 };
 
 //	~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*

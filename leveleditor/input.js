@@ -15,13 +15,18 @@ var input = function() {
 		document.getElementById("debug1").innerHTML=grid[tempy][tempx];
 		document.getElementById("debug4").innerHTML=testSelector;
 
-		grid[tempy][tempx] = parseInt(testSelector);		
+		if (parseInt(testSelector) < 100) {
+			grid[tempy][tempx] = parseInt(testSelector);
+		}
+		else if (parseInt(testSelector) < 200) {
+			gridwaypoint[tempy][tempx] = parseInt(testWaypoint);
+		}
+		
 		for (var i = 0; i < objectList.length; i++){
 			objectList.splice(i, 1);
 			oCount -= 1;
 			i -= 1;
 		}
-
 		preload();
 
 		keysUp["leftclick"] = true;
