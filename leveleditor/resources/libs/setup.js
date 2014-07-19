@@ -18,8 +18,13 @@ var mousePos;	//	The mouse position in mousePos.x for x, mousePos.y for y
 
 //	CONSTANTS
 var IMAGESIZE = 16;
-var CANVASWIDTH = 1366;
-var CANVASHEIGHT = 768;
+var CANVASWIDTH = 640;
+var CANVASHEIGHT = 640;
+
+//	Test Variables
+var theSelector;
+var tempList = new Array();
+var tempList2 = new Array();
 
 //	The canvas
 //var canvas = document.createElement("canvas");

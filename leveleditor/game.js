@@ -7,9 +7,10 @@ var preload = function() {
 	// objectList[oCount] = new palette(0,0);
 	// objectList[oCount-1].palettelist.push(new grasstile(0,0));
 	// objectList[oCount-1].palettelist.push(new bricksmile(0,0));
-	objectList[oCount] = new selector(0, 0);
 	objectList[oCount] = new grasstile(64,64);
 	objectList[oCount] = new bricksmile(64,128);
+	objectList[oCount] = new selector(0, 0);
+	theSelector = objectList[oCount-1];
 
 };
 
