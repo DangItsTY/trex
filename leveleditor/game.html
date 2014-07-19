@@ -35,8 +35,9 @@
 	</div>
 	
 	<div id="palette" style="position:absolute; top:0px; right:0px;">
-		<div id="grass" onClick="dipBrush(this.id)" style="width:64px; height:64px; background:url('resources/images/grass.png');"></div>
-		<div id="brick" onClick="dipBrush(this.id)" style="width:64px; height:64px; background:url('resources/images/brick.png');"></div>
+		<div id="grass" onClick="dipBrush(this.id)" style="width:48px; height:48px; background:url('resources/images/grass.png');"></div>
+		<div id="brick" onClick="dipBrush(this.id)" style="width:48px; height:48px; background:url('resources/images/brick.png');"></div>
+		<div id="spawnpoint" onClick="dipBrush(this.id)" style="width:48px; height:48px; background:url('resources/images/spawnpoint.png');"></div>
 	</div>
 	
 	<!--
@@ -82,7 +83,15 @@
 	<script>
 		var dipBrush = function (item) {
 			theSelector.image.src = "resources/images/"+item+".png";
+			if (item == "grass"){
+				testSelector = 0;
+			}
+			else if (item == "brick"){
+				testSelector = 1;
+			}
 		};
+
+
 	</script>
 </body>
 </html>

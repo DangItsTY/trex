@@ -9,8 +9,8 @@ var followMouseGrid = function (object) {
 //	Note: Hard coded values Fix this
 //	~~~~~~~*~~~~~~~*
 	if (mousePos != null) {
-		object.x = Math.floor((mousePos.x+32)/64) * 64;
-		object.y = Math.floor((mousePos.y+32)/64) * 64;
+		object.x = Math.floor((mousePos.x+(IMAGESIZE/2))/IMAGESIZE) * IMAGESIZE;
+		object.y = Math.floor((mousePos.y+(IMAGESIZE/2))/IMAGESIZE) * IMAGESIZE;
 	}
 };
 

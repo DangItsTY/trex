@@ -64,7 +64,7 @@ var selector = function (x, y) {
 	this.description = "An indicator. Shows selected square.";
 	this.x = x;
 	this.y = y;
-	this.size = 64;
+	this.size = IMAGESIZE;
 	this.imageX = 0;
 	this.imageY = 0;
 	this.image = new Image();
@@ -81,7 +81,7 @@ var grasstile = function(x, y) {
 	this.x = x;
 	this.y = y;
 	
-	this.size = 64;
+	this.size = IMAGESIZE;
 	this.imageX = 0;
 	this.imageY = 0;
 	this.image = new Image();
@@ -99,11 +99,29 @@ var bricksmile = function(x, y) {
 	this.x = x;
 	this.y = y;
 	
-	this.size = 64;
+	this.size = IMAGESIZE;
 	this.imageX = 0;
 	this.imageY = 0;
 	this.image = new Image();
 	this.image.src = "resources/images/brick.png";
+	this.collisionType = "transparent";
+	this.runInput = function(modifier) { };
+	this.act = function(modifier, obj) { };
+	this.resolve = function(modifier) { };
+
+	oCount++;
+};
+
+var spawnpoint = function(x, y) {
+	this.name = "spawnpoint";
+	this.x = x;
+	this.y = y;
+	
+	this.size = IMAGESIZE;
+	this.imageX = 0;
+	this.imageY = 0;
+	this.image = new Image();
+	this.image.src = "resources/images/spawnpoint.png";
 	this.collisionType = "transparent";
 	this.runInput = function(modifier) { };
 	this.act = function(modifier, obj) { };
