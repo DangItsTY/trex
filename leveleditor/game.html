@@ -35,7 +35,8 @@
 	</div>
 	
 	<div id="palette" style="position:absolute; top:0px; right:0px;">
-		<div id="grassitem" style="background:url('resources/images/grasstile.png');"></div>
+		<div id="grass" onClick="dipBrush(this.id)" style="width:64px; height:64px; background:url('resources/images/grass.png');"></div>
+		<div id="brick" onClick="dipBrush(this.id)" style="width:64px; height:64px; background:url('resources/images/brick.png');"></div>
 	</div>
 	
 	<!--
@@ -77,5 +78,11 @@
 	and dynamically changing perspectives (from platformer to top down to first person). There will be a GUI that
 	allows users to create levels.
 	</div>
+	
+	<script>
+		var dipBrush = function (item) {
+			theSelector.image.src = "resources/images/"+item+".png";
+		};
+	</script>
 </body>
 </html>

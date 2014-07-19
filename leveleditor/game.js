@@ -4,11 +4,6 @@
 var preload = function() {
 	//objectList[oCount] = new flybot(CANVASWIDTH/2, CANVASHEIGHT/2);		//	Creates an object inside objectList
 	//selectedPlayer = 0;		//	Sets currently controlled object to the first object created (ie the one above)
-	// objectList[oCount] = new palette(0,0);
-	// objectList[oCount-1].palettelist.push(new grasstile(0,0));
-	// objectList[oCount-1].palettelist.push(new bricksmile(0,0));
-	objectList[oCount] = new grasstile(64,64);
-	objectList[oCount] = new bricksmile(64,128);
 	objectList[oCount] = new selector(0, 0);
 	theSelector = objectList[oCount-1];
 
@@ -30,7 +25,7 @@ var update = function () {
 //	Render
 //	~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*
 var render = function () {
-	ctxOff.fillStyle = "rgb(255,255,255)";
+	ctxOff.fillStyle = "rgb(0,0,0)";
     ctxOff.fillRect (0,0,CANVASWIDTH,CANVASHEIGHT);		//	Draw black background
 	
 	drawList(objectList);	//	Draw objects (is now prerendered)
