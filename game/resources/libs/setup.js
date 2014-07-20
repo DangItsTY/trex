@@ -14,6 +14,12 @@ var cameraDeltaX = 0;
 var cameraDeltaY = 0;
 var objectList = new Array();
 var oCount = 0;
+var mousePos;	//	The mouse position in mousePos.x for x, mousePos.y for y
+
+//	Test Variables
+var theSelector;
+var tempList = new Array();
+var tempList2 = new Array();
 
 //	CONSTANTS
 var IMAGESIZE = 16;
@@ -45,6 +51,19 @@ addEventListener("keydown", function (e) {
 addEventListener("keyup", function (e) {
 	keysUp[e.keyCode] = true;
 	delete keysDown[e.keyCode];
+}, false);
+
+canvas.addEventListener("mousedown", mouseDown, false);		//	Note, detecting for left click requires these few functions. Added a special index "leftclick" for keysDown and keysUp
+function mouseDown() {
+	keysDown["leftclick"] = true;
+}
+canvas.addEventListener("mouseup", mouseUp, false);
+function mouseUp() {
+	keysDown["leftclick"] = false;
+}
+
+canvas.addEventListener('mousemove', function(evt) {
+	mousePos = getMousePos(canvas, evt);
 }, false);
 
 //	Key Mapping

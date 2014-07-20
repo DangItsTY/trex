@@ -26,6 +26,20 @@ var collidesWith = function(object, target) {
 	}
 };
 
+var isInRange = function (object, target, rangeSize) {
+//	~~~~~~~*~~~~~~~*
+//	Requirements:
+//	Description: Returns true if object is in range of the target. rangeSize indicates size of the boundaries to check if in range.
+//	~~~~~~~*~~~~~~~*
+	if (object.x <= target.x + rangeSize && object.x >= target.x - rangeSize &&
+		object.y <= target.y + rangeSize && object.y >= target.y - rangeSize) {
+		return true;
+	}
+	else {
+		return false;
+	}
+};
+
 var roll = function (min, max) {
 	return (Math.floor(Math.random() * (max-min+1)) + min);
 };
@@ -41,3 +55,11 @@ var findObject = function (list, objectName) {
 	}
 	return result;
 };
+
+function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: evt.clientX - rect.left,
+      y: evt.clientY - rect.top
+    };
+}
