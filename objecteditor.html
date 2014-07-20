@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html style="margin:0px; padding:0px; height:100%;">
+<head>
+	<title>Object Editor</title>
+</head>
+<body style="margin:0px; padding:0px; height:100%; font-family:Trebuchet MS; font-weight:bold; font-size:14pt; color:#FFFFFF;">
+	<div id="explorer" style="width:25%; height:100%; float:left; background-color:#00FF00;">
+	</div>
+	<div id="table" style="width:50%; height:100%; float:left;">
+		<div id="tablefield" style="width:50%; height:100%; background-color:#FF0000; float:left;"></div>
+		<div id="tablevalue" style="width:50%; height:100%; background-color:#0000FF; float:left;"></div>
+	</div>
+	<div id="testmessage" style="width:25%; height:100%; float:left; background-color:#000000;">Test Messages Go Here!<br></div>
+	
+	<script>
+		//	The JSON data
+		var dataarray = [
+			{"id":1, "name":"ty", "last":"dang", "class":"assassin", "favorite color":"red"},
+			{"id":2, "name":"stephen", "last":"dang", "class":"mage", "favorite color":"blue"},
+			{"id":3, "name":"alan", "last":"dang", "class":"warrior", "favorite color":"green"}
+			];
+		//	Builds strings for displaying html content
+		var htmlbuilder = "";
+		var htmlbuilder2 = "";
+		
+		//	First load all objects into explorer
+		htmlbuilder = "";
+		for (var i = 0; i < dataarray.length; i++) {
+			htmlbuilder += '	<div id="'+dataarray[i].id+'" onclick="selectObject(this.id)">';
+			htmlbuilder += dataarray[i].name;
+			htmlbuilder += '	</div>';
+		}
+		document.getElementById("explorer").innerHTML = htmlbuilder;
+		
+		
+		//	Loads the key value tables of currently selected object
+		var loadTable = function (id) {
+			htmlbuilder = "";
+			htmlbuilder2 = "";
+			var indexid = findJSONObject(id);
+			for (field in dataarray[indexid]) {
+				htmlbuilder += '	<div>';
+				htmlbuilder += field;
+				htmlbuilder += '	</div>';
+				htmlbuilder2 += '	<div>';
+				htmlbuilder2 += dataarray[indexid][field];
+				htmlbuilder2 += '	</div>';
+			}
+			document.getElementById("tablefield").innerHTML = htmlbuilder;
+			document.getElementById("tablevalue").innerHTML = htmlbuilder2;
+		};
+		
+		//	Finds the index id of the object, based on dataarray
+		var findJSONObject = function (id) {
+			for (var i = 0; i < dataarray.length; i++) {
+				if (dataarray[i].id == id) {
+					return i;
+				}
+			}
+		};
+		
+		//	Select the object
+		var selectObject = function (id) {
+			var indexid = parseInt(id);
+			loadTable(indexid);
+		};
+		
+		//	Testing
+		var testdata = {"hello":"world"};
+		document.getElementById("testmessage").innerHTML += testdata.hello+"<br>";
+	</script>
+</body>
+</html>
