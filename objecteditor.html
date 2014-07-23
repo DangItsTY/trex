@@ -88,8 +88,10 @@
 		//	Edits the selected value
 		var editValue = function (field) {
 			var tempval = prompt("Edit");
-			dataarray[selectedId][field] = tempval;
-			loadTable(selectedId);
+			if (tempval.length > 0) {
+				dataarray[selectedId][field] = tempval;
+				loadTable(selectedId);
+			}
 		};
 		
 		//	Adds a new field with new value
