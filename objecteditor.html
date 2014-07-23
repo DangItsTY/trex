@@ -3,12 +3,17 @@
 <head>
 	<title>Object Editor</title>
 </head>
-<body style="margin:0px; padding:0px; height:100%; font-family:Trebuchet MS; font-weight:bold; font-size:14pt; color:#FFFFFF;">
-	<div id="explorer" style="width:25%; height:100%; float:left; background-color:#00FF00;">
+<body style="margin:0px; padding:0px; height:100%; font-family:Trebuchet MS; font-weight:bold; font-size:14pt; color:#FFFFFF; background-color:#000000;">
+	<div id="explorer_bg" style="width:25%; height:100%; float:left; background-color:#000000;">
+		<div id="explorer" style="padding:20px; border-style:outset; border-width:4px; border-color:#FF0000; border-radius:2px;"></div>
 	</div>
 	<div id="table" style="width:50%; height:100%; float:left;">
-		<div id="tablefield" style="width:50%; height:100%; background-color:#FF0000; float:left;"></div>
-		<div id="tablevalue" style="width:50%; height:100%; background-color:#0000FF; float:left;"></div>
+		<div id="tablefield_bg" style="width:50%; height:100%; float:left; background-color:rgba(255,0,0,0.2);">
+			<div id="tablefield" style="padding:20px; border-style:outset; border-width:4px; border-color:#00FF00; border-radius:2px;"></div>
+		</div>
+		<div id="tablevalue_bg" style="width:50%; height:100%; float:left; background-color:rgba(255,255,255,0.8);">
+			<div id="tablevalue" style="padding:20px; border-style:outset; border-width:4px; border-color:#0000FF; border-radius:2px;"></div>
+		</div>
 	</div>
 	<div id="testmessage" style="width:25%; height:100%; float:left; background-color:#000000;">Test Messages Go Here!<br></div>
 	
@@ -22,48 +27,132 @@
 		//	Builds strings for displaying html content
 		var htmlbuilder = "";
 		var htmlbuilder2 = "";
+		var selectedId = 0;	//	The id of the object, reflects index of data array also
+		var dataCount = dataarray.length;
 		
-		//	First load all objects into explorer
-		htmlbuilder = "";
-		for (var i = 0; i < dataarray.length; i++) {
-			htmlbuilder += '	<div id="'+dataarray[i].id+'" onclick="selectObject(this.id)">';
-			htmlbuilder += dataarray[i].name;
-			htmlbuilder += '	</div>';
+		//	Load all objects into explorer
+		var loadObjects = function () {
+			//	First, reid the data array
+			for (var i = 0; i < dataarray.length; i++) {
+				dataarray[i]["id"] = i;
+			}
+			
+			dataCount = dataarray.length;
+			htmlbuilder = "";
+			for (var i = 0; i < dataarray.length; i++) {
+				htmlbuilder += '	<div id="'+dataarray[i].id+'" onclick="loadTable(this.id)">';
+				htmlbuilder += dataarray[i].name;
+				htmlbuilder += '	</div>';
+			}
+			htmlbuilder += '<button onclick="addObject()">Add Object</button>';
+			htmlbuilder += '<button onclick="removeObject()">Remove Object</button>';
+			htmlbuilder += '<br>';
+			htmlbuilder += '<button onclick="importJSON()">Import JSON</button>';
+			htmlbuilder += '<button onclick="exportJSON()">Export To JSON</button>';
+			htmlbuilder += '<button onclick="exportJS()">Export To Javascript Object</button>';
+			
+			document.getElementById("explorer").innerHTML = htmlbuilder;
+			document.getElementById("tablefield").innerHTML = "";
+			document.getElementById("tablevalue").innerHTML = ""
 		}
-		document.getElementById("explorer").innerHTML = htmlbuilder;
-		
 		
 		//	Loads the key value tables of currently selected object
 		var loadTable = function (id) {
+			selectedId = parseInt(id);
 			htmlbuilder = "";
 			htmlbuilder2 = "";
-			var indexid = findJSONObject(id);
-			for (field in dataarray[indexid]) {
-				htmlbuilder += '	<div>';
+			for (field in dataarray[selectedId]) {
+				htmlbuilder += '	<div id="'+field+'" onclick="editField(this.id)">';
 				htmlbuilder += field;
 				htmlbuilder += '	</div>';
-				htmlbuilder2 += '	<div>';
-				htmlbuilder2 += dataarray[indexid][field];
+				
+				htmlbuilder2 += '	<div id="'+field+'" onclick="editValue(this.id)">';
+				htmlbuilder2 += dataarray[selectedId][field];
 				htmlbuilder2 += '	</div>';
 			}
+			htmlbuilder += '<button onclick="addField()">Add Field</button>';
+			
 			document.getElementById("tablefield").innerHTML = htmlbuilder;
 			document.getElementById("tablevalue").innerHTML = htmlbuilder2;
 		};
 		
-		//	Finds the index id of the object, based on dataarray
-		var findJSONObject = function (id) {
-			for (var i = 0; i < dataarray.length; i++) {
-				if (dataarray[i].id == id) {
-					return i;
-				}
+		//	Edits the selected field
+		var editField = function (field) {
+			var yesno = prompt("Delete this field? (y/n)");
+			if (yesno == "y") {
+				delete dataarray[selectedId][field];
+				loadTable(selectedId);
 			}
 		};
 		
-		//	Select the object
-		var selectObject = function (id) {
-			var indexid = parseInt(id);
-			loadTable(indexid);
+		//	Edits the selected value
+		var editValue = function (field) {
+			var tempval = prompt("Edit");
+			dataarray[selectedId][field] = tempval;
+			loadTable(selectedId);
 		};
+		
+		//	Adds a new field with new value
+		var addField = function (field) {
+			var newField = prompt("New Field Name");
+			if (newField.length > 0) {
+				dataarray[selectedId][newField] = null;
+				loadTable(selectedId);
+			}
+		};
+				
+		//	Adds a new object
+		var addObject = function (field) {
+			var newObject = prompt("New Object Name");
+			if (newObject.length > 0) {
+				var tempjson = {"id":dataCount, "name":newObject};
+				dataarray[dataCount] = tempjson;
+				loadObjects();
+				loadTable(dataCount-1);
+			}
+		};
+		
+		//	Remove object
+		var removeObject = function () {
+			var removeObject = prompt("Remove which object by id?");
+			if (removeObject.length > 0) {
+				dataarray.splice(parseInt(removeObject), 1);
+				loadObjects();
+			}
+		};
+		
+		//	Exports data to JSON string
+		var exportJSON = function (field) {
+			htmlbuilder = JSON.stringify(dataarray, null, "\t");
+			document.getElementById("testmessage").innerHTML = htmlbuilder;
+			prompt("Copy to clipboard?", htmlbuilder);
+		};
+		
+		//	Exports data to javascript object
+		var exportJS = function (field) {
+			//	TyDo: This is not perfect yet!
+			htmlbuilder = "";
+			for (var i = 0; i < dataarray.length; i++) {
+				htmlbuilder += 'var '+dataarray[i].name+' = function (x, y) {';
+				htmlbuilder += '\n';
+				for (field in dataarray[i]) {
+					htmlbuilder += '\t'+'this.'+field+' = "'+dataarray[i][field]+'";';
+					htmlbuilder += '\n';
+				}
+				htmlbuilder += '};';
+				htmlbuilder += '\n\n';
+			}
+			document.getElementById("testmessage").innerHTML = htmlbuilder;
+			prompt("Copy to clipboard?", htmlbuilder);
+		};
+		
+		var importJSON = function() {
+			var newjson = prompt("Paste JSON here");
+			dataarray = JSON.parse(newjson);
+			loadObjects();
+		};
+		
+		loadObjects();
 		
 		//	Testing
 		var testdata = {"hello":"world"};
