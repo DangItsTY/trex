@@ -2,8 +2,6 @@
 //	Preload
 //	~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*
 var preload = function() {
-	//objectList[oCount] = new flybot(CANVASWIDTH/2, CANVASHEIGHT/2);		//	Creates an object inside objectList
-	//selectedPlayer = 0;		//	Sets currently controlled object to the first object created (ie the one above)
     for(var i = 0; i < grid.length; i++){
     	for(var j = 0; j<grid[i].length;j++){
     		if (grid[i][j] == 0){
@@ -43,7 +41,6 @@ var preload = function() {
 	
 	objectList[oCount] = new selector(0, 0);
 	theSelector = objectList[oCount-1];	
-
 };
 
 //	~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*
