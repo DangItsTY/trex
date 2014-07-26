@@ -107,16 +107,6 @@
 		};
 		
 		var exportGrid = function () {
-			var gridString = "var tempArray = new Array();\n";
-			var temp = document.getElementById("waypointlist").value;
-			var temp2 = temp.split(",");
-			for (var i = 0; i < temp2.length; i++) {
-				var tempLoc = findWayPoint(parseInt(temp2[i]));
-				gridString += 'objectList[oCount] = new waypoint('+tempLoc[1]+'*IMAGESIZE, '+tempLoc[0]+'*IMAGESIZE);\n';
-				gridString += 'tempList.push(objectList[oCount-1]);\n';
-			}
-			prompt("Copy Grid", gridString);
-			/*
 			var gridString = "var grid = [\n";
 			for (var i = 0; i < grid.length; i++) {
 				gridString += "\t[";
@@ -131,8 +121,16 @@
 				gridString += "\n";
 			}
 			gridString += "];";
+			gridString += "\n";
+			gridString += "var tempArray = new Array();\n";
+			var temp = document.getElementById("waypointlist").value;
+			var temp2 = temp.split(",");
+			for (var i = 0; i < temp2.length; i++) {
+				var tempLoc = findWayPoint(parseInt(temp2[i]));
+				gridString += 'objectList[oCount] = new waypoint('+tempLoc[1]+'*IMAGESIZE, '+tempLoc[0]+'*IMAGESIZE);\n';
+				gridString += 'tempList.push(objectList[oCount-1]);\n';
+			}
 			prompt("Copy Grid", gridString);
-			*/
 		};
 		
 		var findWayPoint = function (value) {
