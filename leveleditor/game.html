@@ -5,7 +5,7 @@
 	<script src="resources/libs/jquery.js"></script>
 	<script src="resources/libs/jquery_ui_min.js"></script>
 </head>
-<body style="margin:0px; height:320px; width:640px; margin-left:auto; margin-right:auto;">
+<body style="margin:0px; height:320px; width:960px; margin-left:auto; margin-right:auto;">
 	<!--
 		//	~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*
 		//	Debug Messages
@@ -42,6 +42,7 @@
 			<div id="waypoint" onClick="dipBrush(this.id)" style="width:48px; height:48px; background:url('resources/images/waypoint.png');"></div>
 			<textarea id="waypointvalue" rows="1" cols="5" maxlength="3"></textarea>
 		</div>
+		<button id="export" onclick="exportGrid()">Export Grid</div>
 	</div>
 	
 	<div id="waypointlabels_wrapper" style="position:relative;">
@@ -102,6 +103,24 @@
 				testSelector = 100;
 				testWaypoint = document.getElementById("waypointvalue").value;
 			}
+		};
+		
+		var exportGrid = function () {
+			var gridString = "var grid = [\n";
+			for (var i = 0; i < grid.length; i++) {
+				gridString += "\t[";
+				for (var j = 0; j < grid[i].length; j++) {
+					gridString += grid[i][j];
+					if (j != grid[i].length-1)
+						gridString += ", ";
+				}
+				gridString += "]";
+				if (i != grid.length-1)
+					gridString += ",";
+				gridString += "\n";
+			}
+			gridString += "];";
+			prompt("Copy Grid", gridString);
 		};
 	</script>
 </body>
