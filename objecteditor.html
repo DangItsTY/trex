@@ -5,7 +5,7 @@
 </head>
 <body style="margin:0px; padding:0px; height:100%; font-family:Trebuchet MS; font-weight:bold; font-size:14pt; color:#FFFFFF; background-color:#000000;">
 	<div id="explorer_bg" style="width:25%; height:100%; float:left; background-color:#000000;">
-		<div id="explorer" style="padding:20px; border-style:outset; border-width:4px; border-color:#FF0000; border-radius:2px;"></div>
+		<div id="explorer" style="padding:20px; border-style:outset; border-width:4px; border-color:#FF0000; border-radius:2px; "></div>
 	</div>
 	<div id="table" style="width:50%; height:100%; float:left;">
 		<div id="tablefield_bg" style="width:50%; height:100%; float:left; background-color:rgba(255,0,0,0.2);">
@@ -40,11 +40,12 @@
 			dataCount = dataarray.length;
 			htmlbuilder = "";
 			for (var i = 0; i < dataarray.length; i++) {
-				htmlbuilder += '	<div id="'+dataarray[i].id+'" onclick="loadTable(this.id)">';
+				htmlbuilder += '	<div id="'+dataarray[i].id+'" onclick="loadTable(this.id)" onmouseenter="this.style.background = &quot;gray&quot;; this.style.cursor = &quot;pointer&quot;" onmouseout="this.style.background = &quot;black&quot;; this.style.cursor = &quot;default&quot;">';
 				htmlbuilder += dataarray[i].name;
 				htmlbuilder += '	</div>';
 			}
-			htmlbuilder += '<button onclick="addObject()">Add Object</button>';
+			htmlbuilder += '<button onclick="addDinoObject()">Add Dinosaur Object</button>';
+			htmlbuilder += '<button onclick="addTowerObject()">Add Tower Object</button>';
 			htmlbuilder += '<button onclick="removeObject()">Remove Object</button>';
 			htmlbuilder += '<br>';
 			htmlbuilder += '<button onclick="importJSON()">Import JSON</button>';
@@ -62,11 +63,11 @@
 			htmlbuilder = "";
 			htmlbuilder2 = "";
 			for (field in dataarray[selectedId]) {
-				htmlbuilder += '	<div id="'+field+'" onclick="editField(this.id)">';
+				htmlbuilder += '	<div id="'+field+'" onclick="editField(this.id)" onmouseenter="this.style.background = &quot;gray&quot;; this.style.cursor = &quot;pointer&quot;" onmouseout="this.style.background = &quot;rgba(255,0,0,0)&quot;; this.style.cursor = &quot;default&quot;">';
 				htmlbuilder += field;
 				htmlbuilder += '	</div>';
 				
-				htmlbuilder2 += '	<div id="'+field+'" onclick="editValue(this.id)">';
+				htmlbuilder2 += '	<div id="'+field+'" onclick="editValue(this.id)" onmouseenter="this.style.background = &quot;gray&quot;; this.style.cursor = &quot;pointer&quot;" onmouseout="this.style.background = &quot;rgba(255,255,255,0)&quot;; this.style.cursor = &quot;default&quot;">';
 				htmlbuilder2 += dataarray[selectedId][field];
 				htmlbuilder2 += '	</div>';
 			}
@@ -103,8 +104,19 @@
 			}
 		};
 				
-		//	Adds a new object
-		var addObject = function (field) {
+		//	Adds a new dino object
+		var addDinoObject = function (field) {
+			var newObject = prompt("New Object Name");
+			if (newObject.length > 0) {
+				var tempjson = {"id":dataCount, "name":newObject, "description":null};
+				dataarray[dataCount] = tempjson;
+				loadObjects();
+				loadTable(dataCount-1);
+			}
+		};
+
+		// Add a new Tower Object
+		var addTowerObject = function (field) {
 			var newObject = prompt("New Object Name");
 			if (newObject.length > 0) {
 				var tempjson = {"id":dataCount, "name":newObject};
@@ -113,6 +125,7 @@
 				loadTable(dataCount-1);
 			}
 		};
+		
 		
 		//	Remove object
 		var removeObject = function () {
