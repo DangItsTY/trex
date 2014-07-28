@@ -19,7 +19,8 @@
 	
 	<script>
 		//	The JSON data
-		var dataarray = [
+		var dataarray = [];
+		dataarray = [
 			{"id":1, "name":"ty", "last":"dang", "class":"assassin", "favorite color":"red"},
 			{"id":2, "name":"stephen", "last":"dang", "class":"mage", "favorite color":"blue"},
 			{"id":3, "name":"alan", "last":"dang", "class":"warrior", "favorite color":"green"}
@@ -108,7 +109,39 @@
 		var addDinoObject = function (field) {
 			var newObject = prompt("New Object Name");
 			if (newObject.length > 0) {
-				var tempjson = {"id":dataCount, "name":newObject, "description":null};
+				var tempjson = {"id":dataCount, //quotes
+				"name":newObject,  // quotes
+				"collisionType":"transparent", // quotes
+				"type":"neutral", // quotes
+				"description":null, // quotes
+				"image.src":"resources/images/name.png", //quotes				
+				"imageX":0,
+				"imageY":0,								
+				"runInput = function()":"{}", //
+				"act = function(object)":"{ dino_ai(object);}",
+				"resolve = function(object)":"{}",
+				"health":0,
+				"damage":100,
+				"range":0,
+				"attackspeed":0,
+				"attacktimer":0,
+				"speed":64,
+				"target":null,
+				"animationspeed":0.3,
+				"animationtime":0,
+				"readytodie":"false"
+				//"image":"new Image()", // built in
+				//"waypointlist":"new Array()" //built in
+				//"size":"IMAGESIZE", //built in 
+				//ocount
+
+
+
+
+
+
+
+			};
 				dataarray[dataCount] = tempjson;
 				loadObjects();
 				loadTable(dataCount-1);
@@ -146,17 +179,34 @@
 		//	Exports data to javascript object
 		var exportJS = function (field) {
 			//	TyDo: This is not perfect yet!
+			var count = 0; //keep count of which objects need to be in quotes
 			htmlbuilder = "";
+			
+
 			for (var i = 0; i < dataarray.length; i++) {
 				htmlbuilder += 'var '+dataarray[i].name+' = function (x, y) {';
 				htmlbuilder += '\n';
+				htmlbuilder += "\tthis.waypointlist = new Array();\n";
+				htmlbuilder += "\tthis.image = new Image();\n";
+				htmlbuilder += "\tthis.size = IMAGESIZE;\n";
 				for (field in dataarray[i]) {
-					htmlbuilder += '\t'+'this.'+field+' = "'+dataarray[i][field]+'";';
-					htmlbuilder += '\n';
+					if(count<6){ //if first 6 in datarray, export with quotes
+						htmlbuilder += '\t'+'this.'+field+' = "'+dataarray[i][field]+'";';
+						htmlbuilder += '\n';
+						count++;
+					}
+					else{ // else export without quotes
+						htmlbuilder += '\t'+'this.'+field+' = '+dataarray[i][field]+';';
+						htmlbuilder += '\n';
+					}
+					
 				}
+				htmlbuilder += "\toCount++;\n";
 				htmlbuilder += '};';
 				htmlbuilder += '\n\n';
+				count = 0;
 			}
+			
 			document.getElementById("testmessage").innerHTML = htmlbuilder;
 			prompt("Copy to clipboard?", htmlbuilder);
 		};
