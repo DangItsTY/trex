@@ -100,8 +100,8 @@ var followMouseGrid = function (object) {
 //	Note: Hard coded values Fix this
 //	~~~~~~~*~~~~~~~*
 	if (mousePos != null) {
-		object.x = Math.floor((mousePos.x+32)/64) * 64;
-		object.y = Math.floor((mousePos.y+32)/64) * 64;
+		object.x = Math.floor((mousePos.x)/(IMAGESIZE)) * (IMAGESIZE) + (IMAGESIZE/2);
+		object.y = Math.floor((mousePos.y)/(IMAGESIZE)) * (IMAGESIZE) + (IMAGESIZE/2);
 	}
 };
 
@@ -160,7 +160,7 @@ var spawndino2 = function (object) {
 
 var level1 = function (object) {
 	if (object.timelinetimer > 5 && object.event == 0) {
-		objectList[oCount] = new spawner(4*64, 0*64);
+		objectList[oCount] = new spawner(4*IMAGESIZE + IMAGESIZE/2, 0*IMAGESIZE + IMAGESIZE/2);
 		objectList[oCount-1].waypointlist = tempList;
 		objectList[oCount-1].target = objectList[oCount-1].waypointlist[0];
 		objectList[oCount-1].spawnspeed = 5;
@@ -171,7 +171,7 @@ var level1 = function (object) {
 		document.getElementById("debug1").innerHTML = tempmsg;
 	}
 	if (object.timelinetimer > 30 && object.event == 1) {
-		objectList[oCount] = new spawner(4*64, 0*64);
+		objectList[oCount] = new spawner(4*IMAGESIZE + IMAGESIZE/2, 0*IMAGESIZE + IMAGESIZE/2);
 		objectList[oCount-1].waypointlist = tempList;
 		objectList[oCount-1].target = objectList[oCount-1].waypointlist[0];
 		objectList[oCount-1].spawnspeed = 3;
@@ -183,7 +183,7 @@ var level1 = function (object) {
 		document.getElementById("debug1").innerHTML = tempmsg;
 	}
 	if (object.timelinetimer > 65 && object.event == 2) {
-		objectList[oCount] = new spawner(4*64, 0*64);
+		objectList[oCount] = new spawner(4*IMAGESIZE + IMAGESIZE/2, 0*IMAGESIZE + IMAGESIZE/2);
 		objectList[oCount-1].waypointlist = tempList;
 		objectList[oCount-1].target = objectList[oCount-1].waypointlist[0];
 		objectList[oCount-1].spawnspeed = 3;
@@ -196,7 +196,7 @@ var level1 = function (object) {
 		document.getElementById("debug1").innerHTML = tempmsg;
 	}
 	if (object.timelinetimer > 80 && object.event == 3) {
-		objectList[oCount] = new spawner(4*64, 0*64);
+		objectList[oCount] = new spawner(4*IMAGESIZE + IMAGESIZE/2, 0*IMAGESIZE + IMAGESIZE/2);
 		objectList[oCount-1].waypointlist = tempList;
 		objectList[oCount-1].target = objectList[oCount-1].waypointlist[0];
 		objectList[oCount-1].spawnspeed = 1;

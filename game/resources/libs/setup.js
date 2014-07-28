@@ -22,9 +22,9 @@ var tempList = new Array();
 var tempList2 = new Array();
 
 //	CONSTANTS
-var IMAGESIZE = 16;
-var CANVASWIDTH = 640;
-var CANVASHEIGHT = 640;
+var IMAGESIZE = 48;
+var CANVASWIDTH = 960;
+var CANVASHEIGHT = 960;
 
 //	The canvas
 //var canvas = document.createElement("canvas");

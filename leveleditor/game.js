@@ -10,6 +10,9 @@ var preload = function() {
     		else if (grid[i][j] == 1){
     			objectList[oCount] = new bricksmile(j*IMAGESIZE,i*IMAGESIZE);
     		}
+			else if (grid[i][j] == 2){
+    			objectList[oCount] = new brick_ur(j*IMAGESIZE,i*IMAGESIZE);
+    		}
    		}
     }
 	

@@ -1,6 +1,90 @@
 //	~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*
 //	Preload
 //	~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*
+var testlevel = function () {
+	/*
+		Changes:
+		-	Objects are now drawn at the center of the tile
+		-	Used IMAGESIZE instead of 48/64
+		-	Changed canvas width and height to 960
+		-	Added new images
+	*/
+	
+	//	Background Image
+	//objectList[oCount] = new bgImage_level1(CANVASWIDTH/2, CANVASHEIGHT/2);
+	for (var i = 0; i < 20; i++) {
+		for (var j = 0; j < 20; j++) {
+			objectList[oCount] = new grasstile(0, 0);
+			objectList[oCount-1].x = j*objectList[oCount-1].size + objectList[oCount-1].size/2;
+			objectList[oCount-1].y = i*objectList[oCount-1].size + objectList[oCount-1].size/2;
+		}
+	}
+	
+	for (var i = 0; i < 10; i++) {
+		objectList[oCount] = new road(0, 0);
+		objectList[oCount-1].x = i*objectList[oCount-1].size + objectList[oCount-1].size/2;
+		objectList[oCount-1].y = 8*objectList[oCount-1].size + objectList[oCount-1].size/2;
+		
+		objectList[oCount] = new road(0, 0);
+		objectList[oCount-1].x = i*objectList[oCount-1].size + objectList[oCount-1].size/2;
+		objectList[oCount-1].y = 9*objectList[oCount-1].size + objectList[oCount-1].size/2;
+		
+		objectList[oCount] = new road(0, 0);
+		objectList[oCount-1].x = i*objectList[oCount-1].size + objectList[oCount-1].size/2;
+		objectList[oCount-1].y = 10*objectList[oCount-1].size + objectList[oCount-1].size/2;
+	}
+	
+	//	Selector Object
+	objectList[oCount] = new selector(0, 0);
+	theSelector = objectList[oCount-1];
+};
+
+var testlevel2 = function () {
+	//	Draw Grass
+	for (var i = 0; i < 20; i++) {
+		for (var j = 0; j < 20; j++) {
+			objectList[oCount] = new grasstile(j*IMAGESIZE + IMAGESIZE/2, i*IMAGESIZE + IMAGESIZE/2);
+		}
+	}
+	//	Draw Path
+	objectList[oCount] = new bricksmile(4*IMAGESIZE + IMAGESIZE/2, 0*IMAGESIZE + IMAGESIZE/2);
+	objectList[oCount] = new bricksmile(4*IMAGESIZE + IMAGESIZE/2, 1*IMAGESIZE + IMAGESIZE/2);
+	objectList[oCount] = new bricksmile(4*IMAGESIZE + IMAGESIZE/2, 2*IMAGESIZE + IMAGESIZE/2);
+	objectList[oCount] = new bricksmile(4*IMAGESIZE + IMAGESIZE/2, 3*IMAGESIZE + IMAGESIZE/2);
+	objectList[oCount] = new bricksmile(4*IMAGESIZE + IMAGESIZE/2, 4*IMAGESIZE + IMAGESIZE/2);
+	objectList[oCount] = new bricksmile(3*IMAGESIZE + IMAGESIZE/2, 4*IMAGESIZE + IMAGESIZE/2);
+	objectList[oCount] = new bricksmile(3*IMAGESIZE + IMAGESIZE/2, 5*IMAGESIZE + IMAGESIZE/2);
+	objectList[oCount] = new bricksmile(3*IMAGESIZE + IMAGESIZE/2, 6*IMAGESIZE + IMAGESIZE/2);
+	objectList[oCount] = new bricksmile(4*IMAGESIZE + IMAGESIZE/2, 6*IMAGESIZE + IMAGESIZE/2);
+	objectList[oCount] = new bricksmile(5*IMAGESIZE + IMAGESIZE/2, 6*IMAGESIZE + IMAGESIZE/2);
+	objectList[oCount] = new bricksmile(5*IMAGESIZE + IMAGESIZE/2, 5*IMAGESIZE + IMAGESIZE/2);
+	objectList[oCount] = new bricksmile(5*IMAGESIZE + IMAGESIZE/2, 4*IMAGESIZE + IMAGESIZE/2);
+	objectList[oCount] = new bricksmile(6*IMAGESIZE + IMAGESIZE/2, 4*IMAGESIZE + IMAGESIZE/2);
+	objectList[oCount] = new bricksmile(7*IMAGESIZE + IMAGESIZE/2, 4*IMAGESIZE + IMAGESIZE/2);
+	objectList[oCount] = new bricksmile(8*IMAGESIZE + IMAGESIZE/2, 4*IMAGESIZE + IMAGESIZE/2);
+	objectList[oCount] = new bricksmile(9*IMAGESIZE + IMAGESIZE/2, 4*IMAGESIZE + IMAGESIZE/2);
+	//	Make Waypoint List
+	objectList[oCount] = new waypoint(4*IMAGESIZE + IMAGESIZE/2, 0*IMAGESIZE + IMAGESIZE/2);
+	tempList.push(objectList[oCount-1]);
+	objectList[oCount] = new waypoint(4*IMAGESIZE + IMAGESIZE/2, 4*IMAGESIZE + IMAGESIZE/2);
+	tempList.push(objectList[oCount-1]);
+	objectList[oCount] = new waypoint(3*IMAGESIZE + IMAGESIZE/2, 4*IMAGESIZE + IMAGESIZE/2);
+	tempList.push(objectList[oCount-1]);
+	objectList[oCount] = new waypoint(3*IMAGESIZE + IMAGESIZE/2, 6*IMAGESIZE + IMAGESIZE/2);
+	tempList.push(objectList[oCount-1]);
+	objectList[oCount] = new waypoint(5*IMAGESIZE + IMAGESIZE/2, 6*IMAGESIZE + IMAGESIZE/2);
+	tempList.push(objectList[oCount-1]);
+	objectList[oCount] = new waypoint(5*IMAGESIZE + IMAGESIZE/2, 4*IMAGESIZE + IMAGESIZE/2);
+	tempList.push(objectList[oCount-1]);
+	objectList[oCount] = new waypoint(9*IMAGESIZE + IMAGESIZE/2, 4*IMAGESIZE + IMAGESIZE/2);
+	tempList.push(objectList[oCount-1]);
+	//	Make Timeline
+	objectList[oCount] = new timeline(0, 0);
+	
+	objectList[oCount] = new selector(0, 0);
+	theSelector = objectList[oCount-1];
+};
+
 var tdtheory_1 = function () {
 	//	Draw Grass
 	for (var i = 0; i < 10; i++) {
@@ -520,6 +604,6 @@ var gameloop = function() {
 //	Start Game Engine
 //	~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*
 then = Date.now();
-tylevel_1();
+testlevel2();
 // window.requestAnimFrame(gameloop);
 setInterval(gameloop,1);

@@ -112,6 +112,24 @@ var bricksmile = function(x, y) {
 	oCount++;
 };
 
+var brick_ur = function(x, y) {
+	this.name = "brick_ur";
+	this.x = x;
+	this.y = y;
+	
+	this.size = IMAGESIZE;
+	this.imageX = 0;
+	this.imageY = 0;
+	this.image = new Image();
+	this.image.src = "resources/images/brick_ur.png";
+	this.collisionType = "transparent";
+	this.runInput = function(modifier) { };
+	this.act = function(modifier, obj) { };
+	this.resolve = function(modifier) { };
+
+	oCount++;
+};
+
 var waypoint = function(x, y) {
 	this.name = "spawnpoint";
 	this.x = x;

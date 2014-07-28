@@ -37,6 +37,7 @@
 	<div id="palette" style="position:absolute; top:0px; right:0px;">
 		<div id="grass" onClick="dipBrush(this.id)" style="width:48px; height:48px; background:url('resources/images/grass.png');"></div>
 		<div id="brick" onClick="dipBrush(this.id)" style="width:48px; height:48px; background:url('resources/images/brick.png');"></div>
+		<div id="brick_ur" onClick="dipBrush(this.id)" style="width:48px; height:48px; background:url('resources/images/brick_ur.png');"></div>
 		<br>
 		<div>
 			<div id="waypoint" onClick="dipBrush(this.id)" style="width:48px; height:48px; background:url('resources/images/waypoint.png');"></div>
@@ -99,6 +100,9 @@
 			}
 			else if (item == "brick"){
 				testSelector = 1;
+			}
+			else if (item == "brick_ur"){
+				testSelector = 2;
 			}
 			else if (item == "waypoint"){
 				testSelector = 100;

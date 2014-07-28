@@ -88,7 +88,7 @@ var unikitty = function(x, y) {
 	this.x = x;
 	this.y = y;
 	
-	this.size = 64;
+	this.size = IMAGESIZE;
 	this.imageX = 0;
 	this.imageY = 0;
 	this.image = new Image();
@@ -118,7 +118,7 @@ var batObj = function(x, y) {
 	this.x = x;
 	this.y = y;
 
-	this.size = 64;
+	this.size = IMAGESIZE;
 	this.imageX = 0;
 	this.imageY = 0;
 	this.image = new Image();
@@ -141,12 +141,30 @@ var batObj = function(x, y) {
 //	Tile Objects
 //	~~~~~~~*~~~~~~~*~~~~~~~*~~~~~~~*
 
+var bgImage_level1 = function(x, y) {
+	this.name = "background";
+	this.x = x;
+	this.y = y;
+	
+	this.size = 960;
+	this.imageX = 0;
+	this.imageY = 0;
+	this.image = new Image();
+	this.image.src = "resources/images/level1.png";
+	this.collisionType = "transparent";
+	this.runInput = function() { };
+	this.act = function(object) { };
+	this.resolve = function(object) { };
+
+	oCount++;
+};
+
 var grasstile = function(x, y) {
 	this.name = "grasstile";
 	this.x = x;
 	this.y = y;
 	
-	this.size = 64;
+	this.size = IMAGESIZE;
 	this.imageX = 0;
 	this.imageY = 0;
 	this.image = new Image();
@@ -164,11 +182,29 @@ var bricksmile = function(x, y) {
 	this.x = x;
 	this.y = y;
 	
-	this.size = 64;
+	this.size = IMAGESIZE;
 	this.imageX = 0;
 	this.imageY = 0;
 	this.image = new Image();
 	this.image.src = "resources/images/brick.png";
+	this.collisionType = "transparent";
+	this.runInput = function() { };
+	this.act = function(object) { };
+	this.resolve = function(object) { };
+
+	oCount++;
+};
+
+var road= function(x, y) {
+	this.name = "dirtpath";
+	this.x = x;
+	this.y = y;
+	
+	this.size = IMAGESIZE;
+	this.imageX = 0;
+	this.imageY = 0;
+	this.image = new Image();
+	this.image.src = "resources/images/road.png";
 	this.collisionType = "transparent";
 	this.runInput = function() { };
 	this.act = function(object) { };
@@ -183,7 +219,7 @@ var selector = function (x, y) {
 	this.description = "An indicator. Shows selected square.";
 	this.x = x;
 	this.y = y;
-	this.size = 64;
+	this.size = IMAGESIZE;
 	this.imageX = 0;
 	this.imageY = 0;
 	this.image = new Image();
@@ -205,7 +241,7 @@ var spawner = function(x, y) {
 	this.description = "Spawns dinosaurs";
 	this.x = x;
 	this.y = y;
-	this.size = 64;
+	this.size = IMAGESIZE;
 	this.imageX = 0;
 	this.imageY = 0;
 	this.image = new Image();
@@ -231,7 +267,7 @@ var timeline = function(x, y) {
 	this.description = "The timeline that holds all of the events to happen in the game";
 	this.x = x;
 	this.y = y;
-	this.size = 64;
+	this.size = IMAGESIZE;
 	this.imageX = 0;
 	this.imageY = 0;
 	this.image = new Image();
@@ -252,7 +288,7 @@ var waypoint = function(x, y) {
 	this.description = "A region on the map. Holds just a location.";
 	this.x = x;
 	this.y = y;
-	this.size = 64;
+	this.size = IMAGESIZE;
 	this.imageX = 0;
 	this.imageY = 0;
 	this.image = new Image();
@@ -274,7 +310,7 @@ var tower = function(x, y) {
 	this.description = "A basic arrow tower. Shoots arrows.";
 	this.x = x;
 	this.y = y;
-	this.size = 64;
+	this.size = IMAGESIZE;
 	this.imageX = 0;
 	this.imageY = 0;
 	this.image = new Image();
@@ -300,7 +336,7 @@ var turret = function(x, y) {
 	this.description = "Pew Pew Pew!";
 	this.x = x;
 	this.y = y;
-	this.size = 64;
+	this.size = IMAGESIZE;
 	this.imageX = 0;
 	this.imageY = 0;
 	this.image = new Image();
@@ -327,7 +363,7 @@ var arrow = function(x, y) {
 	this.x = x;
 	this.y = y;
 	
-	this.size = 64;
+	this.size = IMAGESIZE/2;
 	this.imageX = 0;
 	this.imageY = 0;
 	this.image = new Image();
@@ -357,7 +393,7 @@ var dinosaur = function(x, y) {
 	this.description = "A fearless dinosaur. Follows waypoints. Simple creature.";
 	this.x = x;
 	this.y = y;
-	this.size = 64;
+	this.size = IMAGESIZE;
 	this.imageX = 0;
 	this.imageY = 0;
 	this.image = new Image();
@@ -393,7 +429,7 @@ var dinosaur2 = function(x, y) {
 	this.description = "A fearless dinosaur. Follows waypoints. Simple creature.";
 	this.x = x;
 	this.y = y;
-	this.size = 64;
+	this.size = IMAGESIZE;
 	this.imageX = 0;
 	this.imageY = 0;
 	this.image = new Image();
