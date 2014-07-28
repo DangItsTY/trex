@@ -77,13 +77,19 @@ var follow = function (object) {
 //	Note: object moves faster in diagonals b/c trig. object also appers to only walk in 8 directions.
 //	~~~~~~~*~~~~~~~*
 	if (object.target != null) {
-		if (object.x < object.target.x) {
+		if (object.x < object.target.x + 1 && object.x > object.target.x - 1) {
+			object.x = object.x;
+		}
+		else if (object.x < object.target.x) {
 			object.x += object.speed*modifier;
 		}
 		else {
 			object.x -= object.speed*modifier;
 		}
-		if (object.y < object.target.y) {
+		if (object.y < object.target.y + 1 && object.y > object.target.y - 1) {
+			object.y = object.y;
+		}
+		else if (object.y < object.target.y) {
 			object.y += object.speed*modifier;
 		}
 		else {
