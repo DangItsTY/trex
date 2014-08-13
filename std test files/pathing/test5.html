@@ -1,0 +1,359 @@
+<!-- Create an interval between unit spawns-->
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="myCanvas" width="640" height="640" style="border:1px solid #000000; margin-left: auto; margin-right: auto; display: block"></canvas>
+    <script type='text/javascript' src='astar.js'></script>
+    <script type='text/javascript'>
+    // shim layer with setTimeout fallback 
+      window.requestAnimFrame = (function(){ 
+        return  window.requestAnimationFrame       ||  
+                window.webkitRequestAnimationFrame ||  
+                window.mozRequestAnimationFrame    ||  
+                window.oRequestAnimationFrame      ||  
+                window.msRequestAnimationFrame     ||  
+                function( callback ){ 
+                  window.setTimeout(callback, 1000 / 60); 
+                }; 
+      })();
+
+      var canvas = document.getElementById('myCanvas');
+      var context = canvas.getContext('2d');
+
+      var my_image;
+      var trex_image;
+
+
+      loadResources(); //preload
+
+      function loadResources(){
+        tri_image = new Image();
+        tri_image.src = "img/tri.bmp";
+        trex_image = new Image();
+        trex_image.src = "img/trex.bmp";
+      }
+
+      //default grid
+      var grid = 
+         [[1,1,1,1],
+          [0,1,1,0],
+          [0,0,1,1],
+          [0,0,1,0]] 
+
+      //creat grid 16 x 16
+      var grid2 =[
+                 [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1], 
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], 
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], 
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], 
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], 
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], 
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], 
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], 
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0]
+                 ];
+      
+      var graph = new Graph(grid2); // change grid for debugging
+      var xlength = graph.grid.length;
+      var ylength = graph.grid[0].length;
+      var size = 640/xlength;
+      var sizePixel = size; // make it equal to size if you want filled square
+      // size = 16;
+
+      //define the grid that I want to find the path for 
+      // user can change start/end points
+
+      var spawn = []; // spawn has x location, y location, and destiation ID, in case there are multiple destinations
+      var dest = []; // dest has x location, y location for enemies to travel to
+      //spawn1
+      spawn.push({x:0, y:0,
+              destid:0 // i want this first spawn point to go to destination 1
+      });
+
+      //destination 1
+      dest.push({
+              x:15,
+              y:1
+      });
+
+      //spawn2
+      spawn.push({
+              x:0,
+              y:15,
+              destid:1 // i want this 2nd spawn point to go to destination 2
+      })
+      //destination 2
+      dest.push({
+              x:15,
+              y:14
+      });
+
+      
+      // create the path
+      function createPath(g,xS,yS,xE,yE){
+        var start = graph.grid[xS][yS];
+        var end = graph.grid[xE][yE];
+        return astar.search(g, start, end);
+      }
+
+      var path = [];
+      for(i = 0; i<spawn.length; i++){  //using spawn.length because there could be multiple spawn points but only one dest
+        path.push(createPath(graph,spawn[i].x,spawn[i].y,dest[spawn[i].destid].x,dest[spawn[i].destid].y));
+      }
+      // console.log(path[0] + " " + path[1]);
+
+     function drawCanvas(){
+      // initial grid
+      for (i = 0; i<ylength; i++)
+      {
+        for (j = 0; j<xlength; j++)
+        {
+           if(graph.grid[i][j].weight == 0){
+            context.fillStyle = "#000000"; // make impassable black
+          }
+          else{
+             context.fillStyle="#00CCFF"; // make 1 weight path teal
+          }
+
+          context.fillRect(j*size,i*size,sizePixel,sizePixel)
+        }
+      }  
+/*
+      //color the starting and end points
+      context.fillStyle = "#CC00CC"; //purple      
+      context.fillRect(ystart*size,xstart*size,sizePixel,sizePixel)
+      context.fillRect(yend*size,xend*size,sizePixel,sizePixel)
+
+      // color the path red     
+      context.fillStyle = "#FF0000"; // red  
+      for (i = 0; i<path1.length-1; i++){    //-1 to avoid coloring end point    
+        context.fillRect(path1[i].y*size,path1[i].x*size,sizePixel,sizePixel);
+      }
+ 
+      //make a line
+      context.strokeStyle = "#00FF00"; //red
+      context.beginPath();
+      context.moveTo(ystart+sizePixel*0.5,xstart);
+      for (i = 0; i < path1.length; i++)
+      {
+        context.lineTo(path1[i].y*size+(sizePixel*0.5),path1[i].x*size+(sizePixel*0.5));
+        context.lineWidth = 10;
+      }
+      context.stroke();
+      */ 
+    }
+
+     
+      
+      function createObj(pname,ppath,px,py,pinterval){
+          switch (pname){
+            case 'trex':                  
+                  var trex = {
+                     health: 100,
+                     img: trex_image,
+                     dmg: 5,
+                     speed: 2,
+                     target: 0,
+                     path: ppath,    
+                     xstart: px, 
+                     ystart: py,
+                     xend: ppath[ppath.length-1].y, 
+                     yend: ppath[ppath.length-1].x,
+                     x: px*size, // px = spawn[0].y
+                     y: py*size, // py = spawn[0].x
+                     interval: pinterval
+                  }
+                  return trex;
+                  break;
+      	    case 'tri':
+                  var tri = {
+                     health: 100,
+                     img: tri_image,
+                     dmg: 5,
+                     speed: 2,
+                     target: 0,
+                     path: ppath,    
+                     xstart: px, 
+                     ystart: py,
+                     xend: ppath[ppath.length-1].y, 
+                     yend: ppath[ppath.length-1].x,
+                     x: px*size, // px = spawn[0].y
+                     y: py*size, // py = spawn[0].x
+                     interval: pinterval
+                  }
+                  return tri;
+                  break;
+          }
+        } // end createObj
+
+        var wave = [];
+        var waveCounter = 0;
+        function createWave(pinterval,pspawn,ppath,punits,pcount,pIU){
+          wave.push({
+                  interval: pinterval, // seconds, time between start time of each wave
+                  spawn: pspawn, //spawn point
+                  path: ppath, // all units of this wave have this path     
+                  units: punits, // name of units in this wave; going to be trex and tri objects in this wave
+                  count: pcount, // # of units of each object; # of trex = 10, tri = 10
+                  intervalUnits: pIU // time between each unit spawn; every 2 seconds trex comes, every 2 seconds tri comes               
+            });
+        }  
+
+      //Wave list
+      //Problem: If I wanted two spawn locations spawning at the same time, how to do it
+      createWave(0,1,path[1],['trex','tri','trex'],[2,3,3],[2,1,1]);
+      createWave(0,1,path[1],['tri'],[1],[2]);
+      //createWave(0,0,path[0],['tri'],[1],[2]);
+          
+      var dino = []; //objectlist 
+      var tick = 0;
+      var waveList = [];    
+      var waveTimer = 0;
+      var unitCounter = 0;
+      var intervalMap = [];    
+      var time = 0;
+      var unitTimer = 0;
+
+      function loop() { 
+          window.requestAnimFrame(loop); 
+          createParticles(); 
+          updateParticles(); 
+          killParticles(); 
+          drawParticles(); 
+      }  
+      
+      function createParticles() { 
+
+        // create master wave list
+        console.log(waveCounter + " waveTimer: " + waveTimer); 
+        if(waveCounter <= wave.length-1 && waveTimer==wave[waveCounter].interval*60){ //if interval has passed, then create next wave       
+          for (i = 0; i < wave[waveCounter].units.length; i++){ // 
+          		for (j = 0; j < wave[waveCounter].count[i]; j++) { //create count number of objects                 
+                  waveList.push(
+            		  createObj(wave[waveCounter].units[i],   //unit name
+                    wave[waveCounter].path,                      // path
+                    spawn[wave[waveCounter].spawn].y,      // xstart: spawn[wave[waveCounter].path].y,
+                    spawn[wave[waveCounter].spawn].x,      // ystart: spawn[wave[waveCounter].path].x,
+                    wave[waveCounter].intervalUnits[i]) 
+                    ); // end push  
+  	             } // inner for                 
+  	           } // outer for
+        waveTimer=-1;
+  	    waveCounter++;  
+        intervalMap = waveList.map(function(o){return o.interval;});  // this is to extract the interval information from each object
+                 
+  	     } // end if
+         
+         // console.log('unitTimer ' + unitTimer + " " + 60*intervalMap[unitCounter]);
+         // console.log('tick ' + tick+ " " + unitCounter*60*intervalMap[unitCounter]);
+         // When the stated interval between units has passed, create the object in the object list
+         if(60*intervalMap[unitCounter] == unitTimer){
+          dino.push(waveList[unitCounter])
+          unitCounter++;
+          unitTimer = -1;
+          // console.log('this' + dino);
+        }
+
+       }// end function 
+          
+       // console.log(dino);
+
+      function updateParticles() {
+          for(var i in dino) {
+              var part = dino[i];	      
+              // I'm on the last waypoint, I've reached the last point
+              if ((part.target == part.path.length-1) && ((part.x == part.path[part.target].y*size) && (part.y == part.path[part.target].x*size)))
+                {
+                  killParticles();
+                }
+              // switch targets once reached waypoint
+              else if ((part.x == part.path[part.target].y*size) && (part.y == part.path[part.target].x*size)) 
+              {
+                part.target +=1;
+              } 
+              else{}
+
+              if (part.x < part.path[part.target].y*size) {
+                part.x += part.speed;
+              }
+              else {
+                part.x -= part.speed;
+              }
+              if (part.y < part.path[part.target].x*size) {
+                part.y += part.speed;
+              }
+              else {
+                part.y -= part.speed;
+              }
+              
+          }
+      }
+      function killParticles() {
+          for(var i in dino) {
+              var part = dino[i];
+              // console.log(part.target);
+              // console.log("x[" + i + "]: " + part.x + " " + part.yend*size + " y:" + part.y + " " + part.xend*size);
+              // if(part.x > canvas.width) {
+              //     return
+              // }
+              if(part.x == part.xend*size && part.y == part.yend*size){
+                delete dino[i];
+                // part.target = 0;
+                // part.x = part.xstart*size;
+                // part.y = part.ystart*size;
+                // console.log('la');
+                // return
+              }
+              
+          }
+      }
+
+      function drawParticles() {
+          // var c = canvas.getContext('2d');
+          context.fillStyle = "blue";
+          context.fillRect(0,0,canvas.width,canvas.height);
+          // drawCanvas();
+          var frame = Math.floor(tick/10); // animation is too fast, let's slow it down
+          var xoff = (frame%3)*24+1; // % means it loops from 0 - 2, 24 +1 is the pixel length
+          for(var i in dino) {
+            var part = dino[i];                    
+            context.drawImage(
+              part.img,
+              xoff,1,23,23, // image x, y, width, height
+              part.x,part.y,size,size // x location, y location, width, height
+              );           
+          }
+          tick++;
+          unitTimer++;
+          if(waveCounter <= wave.length-1){
+            waveTimer++;
+          }
+      }
+
+          //draw the path on the canvas
+     
+      
+// console.log(path1);
+// drawCanvas();
+window.requestAnimFrame(loop); 
+      
+
+      
+    </script>
+  </body>
+</html>      

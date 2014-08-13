@@ -237,20 +237,6 @@ var tdtheory_4 = function () {
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 var tylevel_1 = function () {
 	//	Draw Grass
 	for (var i = 0; i < 10; i++) {
@@ -520,6 +506,8 @@ var gameloop = function() {
 //	Start Game Engine
 //	~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*~~~~~~~TD~~~~~~*
 then = Date.now();
-tylevel_1();
+objectList[oCount] = new timeline(0, 0);
+objectList[oCount-1].act = function(object) { level_1(); };
+// level_1();
 // window.requestAnimFrame(gameloop);
 setInterval(gameloop,1);

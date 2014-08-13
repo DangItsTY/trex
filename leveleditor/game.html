@@ -31,7 +31,7 @@
 		<div id="debug17"></div>
 		<div id="debug18"></div>
 		<div id="debug19"></div>
-		<div id="debug20"></div>
+		<div id="debug20" style = "position:absolute; top:400px; left:div"></0px>
 	</div>
 	
 	<div id="palette" style="position:absolute; top:0px; right:0px;">
@@ -122,6 +122,12 @@
 			gridString += "];";
 			prompt("Copy Grid", gridString);
 		};
+
+		var showBrushLoc = function () {
+		 	document.getElementById("debug20").innerHTML = "Mouse Position: (" + theSelector.x/48 + "," + theSelector.y/48 + ")"; 
+		};
+
+		setInterval(showBrushLoc, 1);
 	</script>
 </body>
 </html>
