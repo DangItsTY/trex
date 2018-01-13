@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Zombies In The Living Room</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				margin: 0px;
+				padding: 0px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="gameContainer" style="width: 1024px; height: 768px; display: flex; justify-content:center; margin-left: auto; margin-right: auto;">
+			<div id="hud" style="width: 1024px; height: 768px; font-size: 11pt; position: relative;">
+				<div style="width: 1024px; position: absolute; left: 0px; color: black; margin: 20px;">
+					<div>
+						KILLS: <span id="zombieKillCount"></span>
+					</div>
+					<div>
+						Time Alive: <span id="survivalTime"></span>
+					</div>
+					<div>
+						Inventory: <span id="inventoryList"></span>
+					</div>
+					<div>
+						HP: <span id="healthPoints"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="three.min.js"></script>
+		<script src="socket.io.min.js"></script>
+		<script src="ColladaLoader.js"></script>
+		<script>
+			//	start of zombies in the living room code
+
+			//	global variables
+			var BLOCKSIZE = 64;	//	size of one square
+			var scene;
+			var camera;
+			var light;
+			var light2;
+			var light3;
+			var renderer;
+			var daes = [];
+			var objects = [];
+			var origin = new THREE.Vector3(0, 0, 0);
+			var colCount = 16;
+			var rowCount = 12;
+			var totalWidth = BLOCKSIZE * colCount;	//	1024
+			var totalHeight = BLOCKSIZE * rowCount;	//	768
+			var deviceWidth = window.innerWidth;
+			var deviceHeight = window.innerHeight;
+			var keys = [];
+			var keyMap = {
+				"up": 87,
+				"down": 83,
+				"left": 65,
+				"right": 68,
+				"jump": 32,
+				"use": 74,
+				"pickup": 75,
+				"drop": 78
+			};
+			var survivalTime = 0;
+			var zombieKillCount = 0;
+			var healthPoints = 0;
+			var inventoryList = [];
+			var socket = io();
+			var selfIndex;
+			var updateSem = 0;
+
+			//	input listeners
+			document.addEventListener('keydown', function(event) {
+				keys[event.keyCode] = true;
+				socket.emit('input control', keys, selfIndex);
+			});
+			document.addEventListener('keyup', function(event) {
+				keys[event.keyCode] = false;
+				socket.emit('input control', keys, selfIndex);
+			});
+
+			//	all drawing functions
+			var drawFloor = function() {
+				var geometry = new THREE.PlaneGeometry(totalWidth, totalHeight);
+				var material = new THREE.MeshBasicMaterial({color: 0x999999, side: THREE.DoubleSide});
+				var mesh = new THREE.Mesh(geometry, material);
+				mesh.rotation.x = 0.5 * Math.PI;
+				scene.add(mesh);
+			};
+
+			var findObjectByUniqueIndex = function(element, index, array) {
+				if (element == undefined || element == null){
+					return;
+				}
+				return element.uniqueIndex == this;
+			};
+
+			var findIndexByUniqueIndex = function(element, index, array) {
+				if (element == undefined || element == null){
+					return;
+				}
+				return element.uniqueIndex == this;
+			};
+
+			//	update timer for now
+			setInterval(function() {
+				survivalTime += 1;
+			}, 1000);
+
+			var gameloop = function() {
+				//	loop on next frame
+				requestAnimationFrame(gameloop);
+
+				renderer.render(scene, camera);
+
+				//	update UI
+				document.getElementById("survivalTime").innerHTML = survivalTime;
+				document.getElementById("zombieKillCount").innerHTML = zombieKillCount;
+				document.getElementById("inventoryList").innerHTML = inventoryList;
+				document.getElementById("healthPoints").innerHTML = healthPoints;
+			};
+
+			var initialize = function() {
+				scene = new THREE.Scene();
+				scene.background = new THREE.Color(0xf0eddc);
+				// camera = new THREE.OrthographicCamera(-1 * (totalWidth / 2), (totalWidth / 2), (totalHeight / 2), -1 * (totalHeight / 2));
+				// camera.position.set(0, 1000, 0);
+				camera = new THREE.PerspectiveCamera(10, deviceWidth / deviceHeight, 1, 8000);
+				camera.position.set(0, 4000, 4000);
+				camera.lookAt(origin);
+
+				light = new THREE.DirectionalLight(0xffffff, 1.0);
+				//var light = new THREE.RectAreaLight();
+				//var light = new THREE.PointLight( 0xffffff, 1, 100 );
+				light.position.set(0, 4000, 4000);
+				scene.add(light);
+				light2 = new THREE.DirectionalLight(0xffffff, 1.0);
+				light2.position.set(4000, 4000, 0);
+				scene.add(light2);
+				light3 = new THREE.DirectionalLight(0xffffff, 1.0);
+				light3.position.set(-4000, 4000, -4000);
+				scene.add(light3);
+
+				renderer = new THREE.WebGLRenderer({antialias: true});
+				renderer.setSize(deviceWidth, deviceHeight);
+				document.getElementById("gameContainer").appendChild(renderer.domElement);
+
+				drawFloor();
+
+				gameloop();
+			};
+			initialize();
+
+			var createBox = function(dataObject) {
+				updateSem += 1;
+				var geometry = new THREE.BoxGeometry(1, 1, 1);
+				var material = new THREE.MeshBasicMaterial({color: dataObject.color});
+				var mesh = new THREE.Mesh(geometry, material);
+				mesh.scale.set = mesh.scale.x = mesh.scale.y = mesh.scale.z = BLOCKSIZE * dataObject.renderSize;
+				mesh.position.set(dataObject.position.x, dataObject.position.y, dataObject.position.z);
+				mesh.uniqueIndex = dataObject.uniqueIndex;
+				objects[dataObject.uniqueIndex] = mesh;
+				scene.add(mesh);
+				updateSem -= 1;
+			};
+
+			var createDae = function(dataObject) {
+				updateSem += 1;
+				var dae = daes[dataObject.dae] || null;
+				if (dae == null) {
+					var daeLoader = new THREE.ColladaLoader();
+					daeLoader.options.convertUpAxis = true;
+					daeLoader.load(dataObject.dae, function(collada) {
+						dae = collada.scene;
+						dae.scale.set = dae.scale.x = dae.scale.y = dae.scale.z = (BLOCKSIZE / 2) * dataObject.renderSize;
+						dae.position.set(dataObject.position.x, dataObject.position.y, dataObject.position.z);
+						dae.uniqueIndex = dataObject.uniqueIndex;
+						daes[dataObject.dae] = dae;
+						objects[dataObject.uniqueIndex] = dae;
+						scene.add(dae);
+						updateSem -= 1;
+					});
+				} else {
+					dae = dae.clone();
+					dae.scale.set = dae.scale.x = dae.scale.y = dae.scale.z = (BLOCKSIZE / 2) * dataObject.renderSize;
+					dae.position.set(dataObject.position.x, dataObject.position.y, dataObject.position.z);
+					dae.uniqueIndex = dataObject.uniqueIndex;
+					objects[dataObject.uniqueIndex] = dae;
+					scene.add(dae);
+					updateSem -= 1;
+				}
+			};
+
+			//	server functions
+			var addObject = function(dataObject) {
+				createDae(dataObject);
+				//createBox(dataObject);
+			};
+			socket.on('add object', addObject);
+
+			socket.on('remove object', function(dataObject) {
+				updateSem += 1;
+				var removedObject = objects.filter(findObjectByUniqueIndex, dataObject.uniqueIndex)[0];
+				var removedIndex = objects.findIndex(findIndexByUniqueIndex, dataObject.uniqueIndex);
+				scene.remove(removedObject);
+				objects[removedIndex] = null;
+				updateSem -= 1;
+			});
+
+			socket.on('update objects', function(dataObjects) {
+			    for (var i = 0; i < dataObjects.length; i++) {
+						if (dataObjects[i] != null) {
+				      var index = dataObjects[i].uniqueIndex;
+				      if (objects[index] == undefined) {
+								if (updateSem == 0) {
+				        	addObject(dataObjects[i]);
+								}
+				      } else {
+				        objects[index].position.set(dataObjects[i].renderPos.x, dataObjects[i].renderPos.y, dataObjects[i].renderPos.z);
+
+				        if (dataObjects[i].direction.x == -1 && objects[index].faceDir != "left") {
+				          objects[index].rotation.y = 1.0 * Math.PI;
+				          objects[index].faceDir == "left";
+				        }
+				        if (dataObjects[i].direction.x == 1 && objects[index].faceDir != "right") {
+				          objects[index].rotation.y = 0 * Math.PI;
+				          objects[index].faceDir == "right";
+				        }
+				        if (dataObjects[i].direction.z == -1 && objects[index].faceDir != "up") {
+				          objects[index].rotation.y = 0.5 * Math.PI;
+				          objects[index].faceDir == "up";
+				        }
+				        if (dataObjects[i].direction.z == 1 && objects[index].faceDir != "down") {
+				          objects[index].rotation.y = 1.5 * Math.PI;
+				          objects[index].faceDir == "down";
+				        }
+				      }
+						}
+			    }
+			});
+
+			socket.on('update self', function(data) {
+				selfIndex = data;
+			});
+
+			socket.on('update info', function(data) {
+				zombieKillCount = data.zombieKillCount;
+				inventoryList = JSON.stringify(data.inventoryList);
+				healthPoints = JSON.stringify(data.healthPoints);
+			});
+		</script>
+	</body>
+</html>

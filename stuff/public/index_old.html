@@ -1,0 +1,410 @@
+<html>
+<head>
+<title>zso</title>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<script id="shader-fs" type="x-shader/x-fragment">
+    precision mediump float;
+
+    void main(void) {
+        gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    }
+</script>
+<script id="shader-vs" type="x-shader/x-vertex">
+    attribute vec3 aVertexPosition;
+
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+
+    void main(void) {
+        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+    }
+</script>
+<script type="text/javascript">
+    var gl;
+    function initGL(canvas) {
+        try {
+            gl = canvas.getContext("experimental-webgl");
+            gl.viewportWidth = canvas.width;
+            gl.viewportHeight = canvas.height;
+        } catch (e) {
+        }
+        if (!gl) {
+            alert("Could not initialise WebGL, sorry :-(");
+        }
+    }
+
+    function getShader(gl, id) {
+        var shaderScript = document.getElementById(id);
+        if (!shaderScript) {
+            return null;
+        }
+
+        var str = "";
+        var k = shaderScript.firstChild;
+        while (k) {
+            if (k.nodeType == 3) {
+                str += k.textContent;
+            }
+            k = k.nextSibling;
+        }
+
+        var shader;
+        if (shaderScript.type == "x-shader/x-fragment") {
+            shader = gl.createShader(gl.FRAGMENT_SHADER);
+        } else if (shaderScript.type == "x-shader/x-vertex") {
+            shader = gl.createShader(gl.VERTEX_SHADER);
+        } else {
+            return null;
+        }
+
+        gl.shaderSource(shader, str);
+        gl.compileShader(shader);
+
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+            alert(gl.getShaderInfoLog(shader));
+            return null;
+        }
+
+        return shader;
+    }
+
+    var shaderProgram;
+
+    function initShaders() {
+        var fragmentShader = getShader(gl, "shader-fs");
+        var vertexShader = getShader(gl, "shader-vs");
+
+        shaderProgram = gl.createProgram();
+        gl.attachShader(shaderProgram, vertexShader);
+        gl.attachShader(shaderProgram, fragmentShader);
+        gl.linkProgram(shaderProgram);
+
+        if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+            alert("Could not initialise shaders");
+        }
+
+        gl.useProgram(shaderProgram);
+
+        shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+        gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+
+        shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
+        shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+    }
+
+    var mvMatrix = mat4.create();
+    var pMatrix = mat4.create();
+
+    function setMatrixUniforms() {
+        gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
+        gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+    }
+
+    var triangleVertexPositionBuffer;
+    var squareVertexPositionBuffer;
+
+    function initBuffers() {
+        triangleVertexPositionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
+        var vertices = [
+             0.0,  1.0,  0.0,
+            -1.0, -1.0,  0.0,
+             1.0, -1.0,  0.0
+        ];
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+        triangleVertexPositionBuffer.itemSize = 3;
+        triangleVertexPositionBuffer.numItems = 3;
+
+        squareVertexPositionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
+        vertices = [
+             1.0,  1.0,  0.0,
+            -1.0,  1.0,  0.0,
+             1.0, -1.0,  0.0,
+            -1.0, -1.0,  0.0
+        ];
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+        squareVertexPositionBuffer.itemSize = 3;
+        squareVertexPositionBuffer.numItems = 4;
+    }
+
+    function drawScene() {
+        gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+
+        mat4.identity(mvMatrix);
+
+        mat4.translate(mvMatrix, [-1.5, 0.0, -7.0]);
+        gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
+        gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, triangleVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+        setMatrixUniforms();
+        gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBuffer.numItems);
+
+
+        mat4.translate(mvMatrix, [3.0, 0.0, 0.0]);
+        gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
+        gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, squareVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+        setMatrixUniforms();
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, squareVertexPositionBuffer.numItems);
+    }
+
+    function webGLStart() {
+        var canvas = document.getElementById("lesson01-canvas");
+        initGL(canvas);
+        //initShaders();
+        //initBuffers();
+
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        gl.enable(gl.DEPTH_TEST);
+
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+
+        //drawScene();
+    }
+</script>
+</head>
+<body onload="webGLStart();">
+    <canvas id="lesson01-canvas" style="display: none; border: none;" width="1000" height="1000"></canvas>
+    <br/>
+
+    <canvas id="playground" width="500" height="500"></canvas>
+    <button onclick="render()">Render</button>
+    <button onclick="cycle()">Cycle</button>
+    <button onclick="cycle(); render();">Render & Cycle</button>
+    <script>
+    //  Make the world
+    var canvas = document.getElementById("playground");
+    var context = canvas.getContext("2d");
+
+    var theFlower = {
+      'name': 'flower',
+      'x': 70,
+      'y': 70
+    };
+
+    var theAnimal = {
+      'name': 'animal',
+      'x': 50,
+      'y': 50,
+      'direction': 0
+    };
+
+    var pointList = []; //  x, y, direction, color
+
+    function drawFlower() {
+      context.beginPath();
+      context.arc(theFlower.x, theFlower.y, 5, 0, 2*Math.PI);
+      context.strokeStyle = '#00FF00';
+      context.stroke();
+      context.fillStyle = '#00FF00';
+      context.fill();
+    };
+
+    function drawAnimal() {
+      context.beginPath();
+      context.arc(theAnimal.x, theAnimal.y, 5, 0, 2*Math.PI);
+      context.strokeStyle = '#FF0000';
+      context.stroke();
+      context.fillStyle = '#FF0000';
+      context.fill();
+    };
+
+    function drawPoint(x, y, color) {
+      context.beginPath();
+      context.arc(x, y, 1, 0, 2*Math.PI);
+      context.strokeStyle = color;
+      context.stroke();
+      context.fillStyle = color;
+      context.fill();
+    };
+
+    function drawPoints(list) {
+      for (var i = 0; i < list.length; i++) {
+        drawPoint(list[i].x, list[i].y, list[i].color);
+      }
+    };
+
+
+
+    //  Beginning new algorithm for neural networking
+
+    //  The Scenario: a flat piece of land with one little flower as a source for energy.
+    //  The animal should learn that the quickest way to get the flower is to just go straight!
+
+    //  First, define the inputs of this organism. The states, any information it will have of its understanding of the world
+    //  No memory yet
+
+    var flowersInSight = [];  //  holds a list of flowers the animal can see
+
+    //  Second, define the mechanical behaviors the animal can do
+
+    var listOfActions = ['move', 'turn'];
+
+    function move() {
+      theAnimal.x = theAnimal.x + Math.sin(theAnimal.direction);
+      theAnimal.y = theAnimal.y + Math.cos(theAnimal.direction);
+    };
+
+    function turn() {
+      theAnimal.direction = Math.random() * 2 * Math.PI;
+    };
+
+    function look() {
+      var viewDistance = 40;
+      var viewWidth = 5;
+      var vertices = [];
+
+      var farPoint = {
+        'x': theAnimal.x + (viewDistance*Math.sin(theAnimal.direction)),
+        'y': theAnimal.y + (viewDistance*Math.cos(theAnimal.direction))
+      };
+      vertices.push({
+        'x': farPoint.x + (viewWidth*Math.sin(theAnimal.direction - (Math.PI/2))),
+        'y': farPoint.y + (viewWidth*Math.cos(theAnimal.direction - (Math.PI/2)))
+      });
+      vertices.push({
+        'x': farPoint.x + (viewWidth*Math.sin(theAnimal.direction + (Math.PI/2))),
+        'y': farPoint.y + (viewWidth*Math.cos(theAnimal.direction + (Math.PI/2)))
+      });
+      vertices.push({
+        'x': theAnimal.x + (viewWidth*Math.sin(theAnimal.direction - (Math.PI/2))),
+        'y': theAnimal.y + (viewWidth*Math.cos(theAnimal.direction - (Math.PI/2)))
+      });
+      vertices.push({
+        'x': theAnimal.x + (viewWidth*Math.sin(theAnimal.direction + (Math.PI/2))),
+        'y': theAnimal.y + (viewWidth*Math.cos(theAnimal.direction + (Math.PI/2)))
+      });
+
+      for (var i = 0; i < vertices.length; i++) {
+        pointList[i] = {
+          'x': vertices[i].x,
+          'y': vertices[i].y,
+          'direction': 0,
+          'color': '#0000FF'
+        }
+      }
+
+      if (checkRectCol(theFlower, vertices)) {
+        flowersInSight[0] = theFlower;
+      } else {
+        flowersInSight = [];
+      }
+    };
+
+    function render() {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      drawFlower();
+      drawAnimal();
+      drawPoints(pointList);
+    };
+    render();
+
+    var inputs = {
+      'seeFlower': 0
+    };
+
+    var nodeTurn = {
+      'name': 'find',
+      'weight': 1000,
+      'energy': 1
+    };
+
+    var nodeMove = {
+      'name': 'move',
+      'weight': 1000,
+      'energy': 10
+    };
+
+    function cycle() {
+      var successMove = nodeMove.weight - nodeMove.energy;
+      var successTurn = nodeTurn.weight - nodeTurn.energy;
+      var choice;
+
+      if (successMove > successTurn) {
+        choice = 'move';
+      } else {
+        choice = 'turn';
+      }
+
+      switch (choice) {
+        case 'move':
+          move();
+          break;
+        case 'turn':
+          turn();
+          look();
+          break;
+      }
+
+      //  calculate rewards
+      var reward;
+      if (flowersInSight.length > 0) {
+        reward = 1000;
+      }
+    };
+
+    //  Implementing a "Point in Polygon" using a ray casting algorithm
+    function checkRectCol(point, rectVertices) {
+      var collided = false;
+      for (var i = 0; i < 4; i++) {
+        var v1 = rectVertices[i];
+        var v2 = rectVertices[i+1] || rectVertices[0];
+        if (((point.y > v1.y) != (point.y > v2.y)) &&
+        (point.x < ((v1.x - v2.x) * v1.y / (v1.y - v2.y)))) {
+          collided = !collided;
+        }
+      }
+      return collided;
+    };
+
+    function gameloop() {
+      render();
+      cycle();
+      //test();
+      window.setTimeout(function() {
+        window.requestAnimationFrame(gameloop);
+      });
+    };
+    //window.requestAnimationFrame(gameloop);
+
+    function restart() {
+      theFlower = {
+        'name': 'flower',
+        'x': 70,
+        'y': 70
+      };
+      theAnimal = {
+        'name': 'animal',
+        'x': 50,
+        'y': 50,
+        'direction': 0
+      };
+      flowersInSight = [];
+    };
+
+    var findTimerStart = new Date().getTime();
+    var findTimerEnd = new Date().getTime();
+    var findTimerElapsedTime = 0;
+    var findCount = 0;
+    var results = [];
+    function test() {
+      if (findCount > 10000) {
+        console.log(results);
+        return;
+      }
+      if (flowersInSight.length != 0) {
+        findCount = findCount + 1;
+        findTimerEnd = new Date().getTime();
+        findTimerElapsedTime = findTimerEnd - findTimerStart;
+        results.push(findTimerElapsedTime);
+        findTimerStart = new Date().getTime();
+        restart();
+      }
+    };
+
+    </script>
+</body>
+</html>
